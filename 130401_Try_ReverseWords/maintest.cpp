@@ -40,7 +40,7 @@
 //
 //	printf(reverse);
 //
-//	return 0;
+//	return EXIT_SUCCESS;
 //}
 
 #include <string>
@@ -60,5 +60,5 @@ int main()
 	}
 	cout << endl;
 
-	return 0;
+	return EXIT_SUCCESS;
 }

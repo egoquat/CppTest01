@@ -13,7 +13,7 @@
 //	}
 //	fclose(fImsi);
 //
-//	return 0;
+//	return EXIT_SUCCESS;
 //}
 
 #include <stdio.h>
@@ -27,7 +27,7 @@ int main()
 	pFunc = func;
 	plus(pFunc); 
 
-	return 0;
+	return EXIT_SUCCESS;
 } 
 
 void plus(void (*p)(void))

@@ -21,7 +21,7 @@ int main()
 			|| 'C' == current
 			|| 'c' == current))
 		{
-			printf("Input words are only acceptable to 0~9 and F or C."); return 0;
+			printf("Input words are only acceptable to 0~9 and F or C."); return EXIT_SUCCESS;
 		}
 
 		if(current == 'F' || current == 'f')
@@ -40,8 +40,8 @@ int main()
 		countBuf++;
 	}
 
-	if(1 > countBuf) { printf("Length of inputs must be 1 more. Too short word."); return 0; }
-	if(false == validateFC) { printf("Last word must be 'F' or 'C' as Fehrenheit or Celcius"); return 0; }
+	if(1 > countBuf) { printf("Length of inputs must be 1 more. Too short word."); return EXIT_SUCCESS; }
+	if(false == validateFC) { printf("Last word must be 'F' or 'C' as Fehrenheit or Celcius"); return EXIT_SUCCESS; }
 
 	int converted = 0;
 	if(true == fToc)
@@ -57,6 +57,6 @@ int main()
 		printf("%dF\n", temperature, converted);
 	}
 
-	return 0;
+	return EXIT_SUCCESS;
 }
 

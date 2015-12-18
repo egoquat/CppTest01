@@ -63,7 +63,7 @@ int main()
 
 	printf("%s", sBuffer);*/
 
-	return 0;
+	return EXIT_SUCCESS;
 }
 
 int imsiMain::iTemp;

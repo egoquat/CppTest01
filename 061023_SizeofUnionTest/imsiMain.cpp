@@ -47,7 +47,7 @@ int main ()
 	printf("struct Test.fParameter[1]		: %f \n",  structTest.fParameter[1]);
 	printf("struct Test.fParameter[2]		: %f \n",  structTest.fParameter[2]);
 
-	return 1;
+	return EXIT_SUCCESS;
 }
 
 imsiMain::imsiMain(void)

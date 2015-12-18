@@ -30,7 +30,7 @@ int main()
 		}
 	}
 
-	//if (countNagative > 0) { printf_s("Alphabet word only acceptable."); return 0; }
+	//if (countNagative > 0) { printf_s("Alphabet word only acceptable."); return EXIT_SUCCESS; }
 
 	const int sizeOutput= 128;
 	char output[sizeOutput] = {0,};
@@ -54,5 +54,5 @@ int main()
 		szWords, countWord, countAlphabetWord, countNagative );
 	printf_s("%s\n", output);
 
-	return 0;
+	return EXIT_SUCCESS;
 }

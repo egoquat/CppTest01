@@ -6,7 +6,7 @@ int main()
 
 	
 
-	return 0;
+	return EXIT_SUCCESS;
 }
 
 //#include "String_.h"
@@ -41,5 +41,5 @@ int main()
 //	sort(vStr.begin(), vStr.end());
 //	str__.MainCountString01(vStr);
 //
-//	return 0;
+//	return EXIT_SUCCESS;
 //}

@@ -41,5 +41,5 @@ int main()
 
 	printf(output);
 
-	return 0;
+	return EXIT_SUCCESS;
 }

@@ -28,6 +28,6 @@ int main2()
 
 	printf(reverse);
 
-	return 0;
+	return EXIT_SUCCESS;
 }
 

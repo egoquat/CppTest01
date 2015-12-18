@@ -74,6 +74,6 @@ int main ()
 		numInput = -1;
 	}
 
-	return 0;
+	return EXIT_SUCCESS;
 }
 

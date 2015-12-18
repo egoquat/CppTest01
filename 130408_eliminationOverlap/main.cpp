@@ -33,5 +33,5 @@ int main()
 	cout << converts[2].replace(1,(inputs.size()<5+1)?inputs.size():5,adds);
 	cout << endl;
 
-	return 0;
+	return EXIT_SUCCESS;
 }

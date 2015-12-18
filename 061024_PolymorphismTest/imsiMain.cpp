@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
 	polymorphic(d2);
 
 
-	return 1;
+	return EXIT_SUCCESS;
 }
 
 imsiMain::imsiMain(void)
