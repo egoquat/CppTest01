@@ -1,0 +1,6 @@
+
+class MissingInteger
+{
+public:
+
+};

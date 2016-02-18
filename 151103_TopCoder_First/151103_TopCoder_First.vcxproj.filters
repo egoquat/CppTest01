@@ -15,21 +15,21 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="KiwiJuice.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="MainFirst.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="String_.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="KiwiJuice.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="String_.h">
+    <ClInclude Include="KiwiJuice.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="KiwiJuice.h">
+    <ClInclude Include="String_.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

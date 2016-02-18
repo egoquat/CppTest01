@@ -18,7 +18,7 @@ int main()
 	{
 		char current = inputs[i];
 		if(','==current) { words = ""; }
-		else { words.append(current); }
+		else { words.append(&current); }
 	}
 
 	cout << "append:";

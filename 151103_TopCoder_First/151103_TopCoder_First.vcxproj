@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{727F189A-40A9-4159-9B2D-92B36416B99B}</ProjectGuid>
+    <ProjectGuid>{C0997D72-68E9-4C45-BF3C-8A1C36B3577A}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>My151103_TopCoder_First</RootNamespace>
   </PropertyGroup>
