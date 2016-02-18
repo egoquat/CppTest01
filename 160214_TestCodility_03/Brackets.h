@@ -1,151 +1,198 @@
+#define CRTDBG_MAP_ALLOC 
+#include <stdlib.h> 
+#include <crtdbg.h>
+
+#ifdef _DEBUG
+#define new new( _NORMAL_BLOCK, __FILE__, __LINE__ )   // #include <new.h>등으로 operator new나 malloc을 
+// Derived해서 정의 한 경우, 사용 할 수 없다.
+#endif
+
+
+#include <string>
+
+using namespace std;
+
 class Brackets
 {
 public:
-	const static int TRUE = 1;
-	const static int FALSE = 0;
-	
-	class Stack
+	template<typename T> class Stack
 	{
 	private:
 		struct Node
 		{
-			void* t;
-			Node* pre;
+			T* t = nullptr;
+			Node* pre = nullptr;
 
-			Node()
+			void Init(T t_)
 			{
 				pre = nullptr;
+				t = new T();
+				*t = t_;
+			}
+
+			void Clear()
+			{
+				if (nullptr != t)
+				{
+					delete t;
+				}
 			}
 		};
 
 		int cnt = 0;
 		Node* last = nullptr;
+		Node* current = nullptr;
 
-	public:
-		int IsEmpty()
+	private:
+		Node* ClearNode()
 		{
-			return (cnt == 0)?TRUE:FALSE;
+			if (nullptr == last) return nullptr;
+
+			Node* del = last;
+			last = last->pre;
+
+			del->Clear();
+			delete del;
+			del = nullptr;
+			return last;
 		}
 
-		void push(void* t)
+	public:
+		int Count()
 		{
-			Node* newNode = (Node*)malloc(sizeof(Node));
-			newNode->t = t;
-			if (nullptr == last)
+			return cnt;
+		}
+
+		bool IsEmpty()
+		{
+			return (cnt == 0) ? true : false;
+		}
+
+		void Clear()
+		{
+			while (nullptr != ClearNode()){}
+
+			cnt = 0;
+		}
+
+		void Push(T t)
+		{
+			Node* newNode = new Node();
+			newNode->Init(t);
+			if (nullptr == current)
 			{
-				last = newNode;
+				last = current = newNode;
 			}
 			else
 			{
-				newNode->pre = last;
-				last = newNode;
+				newNode->pre = current;
+				last = current = newNode;
 			}
 			cnt++;
 		}
 
-		void* Pop()
+		T* Pop()
 		{
-			if (nullptr == last)
+			if (nullptr == current || cnt <= 0)
 			{
-				return NULL;
+				return nullptr;
 			}
 			else
 			{
+				T* t = current->t;
+				current = current->pre;
 				cnt--;
-				void* t = last->t;
-				Node* del = last;
-				last = last->pre;
-
-				free(del->t);
-				free(del);
-
 				return t;
 			}
 		}
 	};
 
-	int IsBracket(char c)
+	bool IsBracket(char c)
 	{
 		if ('{' == c || '}' == c
 			|| '(' == c || ')' == c
 			|| '[' == c || ']' == c)
 		{
-			return TRUE;
+			return true;
 		}
-		
-		return FALSE;
+
+		return false;
 	}
 
-	int IsCloseBracket(char c)
+	bool IsCloseBracket(char c)
 	{
 		if ('}' == c || ')' == c || ']' == c)
 		{
-			return TRUE;
+			return true;
 		}
 
-		return FALSE;
+		return false;
 	}
 
-	int IsPair(char open, char close)
+	bool IsPair(char open, char close)
 	{
 		switch (close)
 		{
-			case ')':
-			{
-				return '(' == open;
-			}
+		case ')':
+		{
+			return '(' == open;
+		}
 			break;
-			case '}':
-			{
-				return '{' == open;
-			}
+		case '}':
+		{
+			return '{' == open;
+		}
 			break;
-			case ']':
-			{
-				return '[' == open;
-			}
+		case ']':
+		{
+			return '[' == open;
+		}
 			break;
 		}
+		return false;
 	}
 
-	int solution(char *S)
-	{		
-		int L = strlen(S);
-		if (L <= 1)
-		{
-			return FALSE;
-		}
+	int solution(string& S)
+	{
+		int L = S.length();
+		if (L < 0) { return false; }
+		if (L == 0)	{ return true; }
+		if (L == 1)	{ return false; }
 
-		int isValidate = TRUE;
+		bool isValidate = true;
 
-		Stack brackets;
+		Stack<char> brackets;
 		for (int i = 0; i < L; ++i)
 		{
 			char c = S[i];
-			if (TRUE == IsBracket(c))
+			if (true == IsBracket(c))
 			{
-				if (TRUE == IsCloseBracket(c))
+				if (true == IsCloseBracket(c))
 				{
-					if (TRUE == brackets.IsEmpty())
+					if (true == brackets.IsEmpty())
 					{
-						isValidate = FALSE;
+						isValidate = false;
 						break;
 					}
 
 					char o = *(char*)brackets.Pop();
-					
-					if (FALSE == IsPair(o, c))
+
+					if (false == IsPair(o, c))
 					{
-						isValidate = FALSE;
+						isValidate = false;
 						break;
 					}
 				}
 				else
 				{
-					brackets.push(&c);
+					brackets.Push(c);
 				}
 			}
 		}
+
+		if (brackets.Count() > 0) isValidate = false;
+
+		brackets.Clear();
 
 		return isValidate;
 	}

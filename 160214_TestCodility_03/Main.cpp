@@ -5,17 +5,24 @@
 
 int main()
 {
+	//_CrtSetBreakAlloc(146);
+
 	/*const int N = 6;
 	int A[] = { 1, 5, 2, 1, 4, 0 };
 	NumberOfDiscIntersections numb;
 	numb.solution(A, N);*/
 
-	char S[5];
-	sprintf(S, "we{(}");
+	string S = "[()}";
 
 	Brackets bracket;
-	bracket.solution(S);
+	int Value = bracket.solution(S);
+
+	S.clear();
+
+	_CrtDumpMemoryLeaks();
 
 	return EXIT_SUCCESS;
 }
 
+
+          
