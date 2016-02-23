@@ -49,7 +49,7 @@
     <ClCompile>
       <PrecompiledHeader>
       </PrecompiledHeader>
-      <WarningLevel>EnableAllWarnings</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
@@ -82,7 +82,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Brackets.h" />
+    <ClInclude Include="Dominator.h" />
+    <ClInclude Include="EquiLeader.h" />
+    <ClInclude Include="Fish.h" />
+    <ClInclude Include="Nesting.h" />
     <ClInclude Include="NumberOfDiscIntersections.h" />
+    <ClInclude Include="Stack.h" />
+    <ClInclude Include="StoneWall.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

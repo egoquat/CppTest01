@@ -105,7 +105,7 @@ public:
 				return t;
 			}
 		}
-	};
+	}; //Stack
 
 	bool IsBracket(char c)
 	{
