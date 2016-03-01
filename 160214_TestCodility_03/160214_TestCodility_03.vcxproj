@@ -85,6 +85,10 @@
     <ClInclude Include="Dominator.h" />
     <ClInclude Include="EquiLeader.h" />
     <ClInclude Include="Fish.h" />
+    <ClInclude Include="MaxDoubleSliceSum.h" />
+    <ClInclude Include="MaxProfit.h" />
+    <ClInclude Include="MaxSliceSum.h" />
+    <ClInclude Include="MinPerimeterRectangle.h" />
     <ClInclude Include="Nesting.h" />
     <ClInclude Include="NumberOfDiscIntersections.h" />
     <ClInclude Include="Stack.h" />

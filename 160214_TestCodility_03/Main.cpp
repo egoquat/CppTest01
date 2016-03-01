@@ -8,6 +8,10 @@
 #include "StoneWall.h"
 #include "Dominator.h"
 #include "EquiLeader.h"
+#include "MaxDoubleSliceSum.h"
+#include "MaxProfit.h"
+#include "MaxSliceSum.h"
+#include "MinPerimeterRectangle.h"
 
 int main()
 {
@@ -83,10 +87,26 @@ int main()
 	/*Dominator dominator;
 	dominator.solution(A);*/
 
-	vector<int> A = { 4, 3, 4, 4, 4, 2 };
+	/*vector<int> A = { 4, 3, 4, 4, 4, 2 };
 
 	EquiLeader equiLeader;
-	equiLeader.solution(A);
+	equiLeader.solution(A);*/
+
+	//vector<int> A = { 3, 2, 6, -1, 4, 5, -1, 2 };
+	//MaxDoubleSliceSum maxDoubleSlice;
+	//maxDoubleSlice.solution(A);
+
+	/*vector<int> A = { 23171, 21011, 21123, 21366, 21013, 21367 };
+	MaxProfit maxProfit;
+	maxProfit.solution(A);*/
+
+	/*vector<int> A = { 3, 2, -6, 4, 0 };
+	MaxSliceSum maxSliceSum;
+	maxSliceSum.solution(A);*/
+
+	const int N = 30;
+	MinPerimeterRectangle minPerimeterRectangle;
+	minPerimeterRectangle.solution(N);
 
 	_CrtDumpMemoryLeaks();
 

@@ -101,7 +101,6 @@ public:
 			}
 		
 			sort(candidates.begin(), candidates.end(), compare);
-			int cnt = candidates[0].cnt;
 
 			idxDominator = candidates[0].idx;
 		}

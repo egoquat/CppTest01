@@ -8,7 +8,7 @@ public:
 	struct C
 	{
 		int value;
-		int cnt;
+		unsigned int cnt;
 
 		int Counting(int value_)
 		{
@@ -34,7 +34,8 @@ public:
 		if (A.size() <= 1) return cntEqui;
 
 		map<int, C> candidates;
-		int i = 0, curr = 0;
+		unsigned int i = 0;
+		int curr = 0;
 
 		for (i = 0; i < A.size(); ++i)
 		{
@@ -55,8 +56,8 @@ public:
 		C& L = sorting[0];
 		if (L.cnt > A.size() / 2)
 		{
-			int cntRight = L.cnt;
-			int cntLeft = 0;
+			unsigned int cntRight = L.cnt;
+			unsigned int cntLeft = 0;
 			int leader = L.value;
 
 			for (i = 0; i < A.size(); ++i)
