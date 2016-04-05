@@ -303,8 +303,11 @@ class theVirus
 
 			if (wayToGoal.size() >= 2)
 			{
-				int parent = wayToGoal[wayToGoal.size() - 2];
-				int child = wayToGoal[wayToGoal.size() - 1];
+				//int parent = wayToGoal[wayToGoal.size() - 2];
+				//int child = wayToGoal[wayToGoal.size() - 1];
+
+				int parent = wayToGoal[0];
+				int child = wayToGoal[1];
 
 				//cout << "0 1" << endl; // Example: 0 1 are the indices of the nodes you wish to sever the link between
 
