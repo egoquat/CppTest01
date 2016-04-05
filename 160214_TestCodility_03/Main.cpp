@@ -12,6 +12,10 @@
 #include "MaxProfit.h"
 #include "MaxSliceSum.h"
 #include "MinPerimeterRectangle.h"
+#include "Flags.h"
+#include "Peaks.h"
+
+typedef unsigned int uint;
 
 int main()
 {
@@ -104,9 +108,39 @@ int main()
 	MaxSliceSum maxSliceSum;
 	maxSliceSum.solution(A);*/
 
-	const int N = 30;
+	/*const int N = 30;
 	MinPerimeterRectangle minPerimeterRectangle;
-	minPerimeterRectangle.solution(N);
+	minPerimeterRectangle.solution(N);*/
+
+	/*vector<int> A = { 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 };
+	Flags flags;
+	flags.solution(A);*/
+
+	/*vector<int> A = { 1, 2, 3, 4, 3, 4, 1, 2, 3, 4, 6, 2 };
+	Peaks peaks;
+	peaks.solution(A);*/
+	
+	int hex = 0xff;
+	int decimal = 0;
+	for (int i = 0; i < 31; ++i)
+	{
+		decimal += ((1 << i) & hex) ? (1 << i) : 0;
+	}
+
+	printf("%d", decimal);
+
+	/*string MESSAGE = "C";
+	string B;
+
+	{
+		char c = MESSAGE[0];
+		B += ((1 << 0) & c) ? "1" : "0";
+
+		for (uint b = 1; (1 << b) <= ((int)c); ++b)
+		{
+			B += ((1 << (b - 1)) & c) ? "1" : "0";
+		}
+	}*/
 
 	_CrtDumpMemoryLeaks();
 
