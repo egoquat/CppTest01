@@ -82,8 +82,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ChuckNorris.h" />
+    <ClInclude Include="HeatDetector.h" />
     <ClInclude Include="LinkedList.h" />
-    <ClInclude Include="theVirus.h" />
+    <ClInclude Include="SkynetStrikesBack.h" />
+    <ClInclude Include="TheParanoidAndroid.h" />
+    <ClInclude Include="SkynetTheVirus.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

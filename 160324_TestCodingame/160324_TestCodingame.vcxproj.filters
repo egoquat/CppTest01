@@ -26,7 +26,16 @@
     <ClInclude Include="LinkedList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="theVirus.h">
+    <ClInclude Include="HeatDetector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TheParanoidAndroid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SkynetTheVirus.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SkynetStrikesBack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

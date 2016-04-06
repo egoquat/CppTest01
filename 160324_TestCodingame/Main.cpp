@@ -1,13 +1,20 @@
 #include <stdlib.h>
 
 #include "ChuckNorris.h"
-#include "theVirus.h"
+#include "SkynetTheVirus.h"
+#include "TheParanoidAndroid.h"
+#include "SkynetStrikesBack.h"
 
 int main()
 {
-	theVirus thevirus;
+	/*SkynetTheVirus thevirus;
+	thevirus.main();*/
 
-	thevirus.main();
+	//TheParanoidAndroid paranoidAndroid;
+	//paranoidAndroid.main();
+
+	SkynetStrikesBack strikesBack;
+	strikesBack.main();
 	
 	return EXIT_SUCCESS;
 }

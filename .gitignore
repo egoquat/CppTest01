@@ -5,3 +5,7 @@
 *.log
 Debug/160324_TestCodingame.exe
 *.ilk
+SolutionTest_C++.opensdf
+SolutionTest_C++.sdf
+*.sdf
+SolutionTest_C++.sdf
