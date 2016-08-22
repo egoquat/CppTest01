@@ -65,5 +65,11 @@
     <ClInclude Include="Peaks.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CountDiv.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GenomicRangeQuery.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

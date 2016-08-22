@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include <time.h>
 
+#include "CountDiv.h"
+#include "GenomicRangeQuery.h"
 #include "NumberOfDiscIntersections.h"
 #include "Brackets.h"
 #include "Fish.h"
@@ -20,6 +22,15 @@ typedef unsigned int uint;
 int main()
 {
 	//_CrtSetBreakAlloc(146);
+
+	/*int A = 6, B = 11, K = 2;
+	CountDiv countDiv;
+	countDiv.solution(A, B, K);*/
+
+	GenomicRangeQuery genomicRangeQuery;
+	string S = "CAGCCTA";
+	vector<int> P, Q;
+	genomicRangeQuery.solution(S, P, Q);
 
 	/*const int N = 6;
 	int A[] = { 1, 5, 2, 1, 4, 0 };
