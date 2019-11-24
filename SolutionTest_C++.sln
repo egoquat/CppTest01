@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.329
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "130327_Try_CharIncoder_Test", "130327_Try_incoder\130327_Try_incoder.vcxproj", "{7C61B927-A157-42D2-9ECC-9C0A6488CF23}"
 EndProject
@@ -255,5 +255,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {037BBBCB-4745-40E4-98DD-9E8030261E4F}
 	EndGlobalSection
 EndGlobal
