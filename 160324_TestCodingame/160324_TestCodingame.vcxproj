@@ -85,6 +85,7 @@
     <ClInclude Include="ChuckNorris.h" />
     <ClInclude Include="HeatDetector.h" />
     <ClInclude Include="LinkedList.h" />
+    <ClInclude Include="Skynet2.h" />
     <ClInclude Include="SkynetStrikesBack.h" />
     <ClInclude Include="TheParanoidAndroid.h" />
     <ClInclude Include="SkynetTheVirus.h" />
