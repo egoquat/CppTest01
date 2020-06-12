@@ -1,3 +1,5 @@
+// https://www.codingame.com/ide/puzzle/skynet-revolution-episode-2 test. pass all.
+
 #pragma once
 #include <iostream>
 #include <string>
