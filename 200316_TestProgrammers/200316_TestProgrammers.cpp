@@ -117,17 +117,17 @@ vector<int> solution__(int n) {
 	}
 	return answer;
 }
-int main()
-{
-	vector<int> returns;
-	for (int i = 1; i < 7; ++i)
-	{
-		//solution(i);
-		//solution02(i);
-		solution03(i);
-	}
-	return 0;
-}
+//int main()
+//{
+//	vector<int> returns;
+//	for (int i = 1; i < 7; ++i)
+//	{
+//		//solution(i);
+//		//solution02(i);
+//		solution03(i);
+//	}
+//	return 0;
+//}
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
 // Debug program: F5 or Debug > Start Debugging menu

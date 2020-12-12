@@ -153,9 +153,11 @@
   <ItemGroup>
     <ClCompile Include="200316_TestProgrammers.cpp" />
     <ClCompile Include="Test01Fold.h" />
+    <ClCompile Include="Test201205_01.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Test01Farthest.h" />
+    <ClInclude Include="Test201205_01.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
