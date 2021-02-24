@@ -1,12 +1,20 @@
 #include "Test201205_01.h"
-
 #include <string>
 #include <vector>
+#include <unordered_map>
+#include <unordered_set>
+#include <queue>
+#include <stack>
+#include <map>
 #include <algorithm>
 #include <iostream>
+#include <cmath>
+#include <functional>
 
 using namespace std;
 
+namespace test01
+{
 string solutiontest(vector<string> participant, vector<string> completion) {
 	string answer = "";
 	for (int i = 0; i < completion.size(); ++i)
@@ -29,26 +37,11 @@ string solutiontest(vector<string> participant, vector<string> completion) {
 	}
 	return answer;
 }
-
-///////////////////////// 참고
-string solutionmarathon(vector<string> participant, vector<string> completion) {
-	string answer = "";
-	sort(participant.begin(), participant.end());
-	sort(completion.begin(), completion.end());
-	for (int i = 0; i < completion.size(); i++)
-	{
-		if (participant[i] != completion[i])
-			return participant[i];
-	}
-	return participant[participant.size() - 1];
-	//return answer;
 }
-///////////////////////// 참고 //
 
 ///////////////////////// 참고
-#include <unordered_map>
-
-using namespace std;
+namespace marathon
+{
 
 string solution(vector<string> participant, vector<string> completion) {
 	string answer = "";
@@ -80,6 +73,7 @@ string solution(vector<string> participant, vector<string> completion) {
 	}
 	return answer;
 }
+}
 ///////////////////////// 참고 //
 
 
@@ -93,7 +87,7 @@ string solution(vector<string> participant, vector<string> completion) {
 지영석 : 11 9552 4421
 전화번호부에 적힌 전화번호를 담은 배열 phone_book 이 solution 함수의 매개변수로 주어질 때, 
 어떤 번호가 다른 번호의 접두어인 경우가 있으면 false를 그렇지 않으면 true를 return 하도록 solution 함수를 작성해주세요.*/
-bool solution(vector<string> phone_book) {
+bool solution_phone_book(vector<string> phone_book) {
 	bool answer = true;
 	//01
 	/*sort(phone_book.begin(), phone_book.end());
@@ -148,7 +142,7 @@ bool solution(vector<string> phone_book) {
 하의	청바지
 겉옷	긴 코트
 스파이가 가진 의상들이 담긴 2차원 배열 clothes가 주어질 때 서로 다른 옷의 조합의 수를 return 하도록 solution 함수를 작성해주세요.*/
-int solution(vector<vector<string>> clothes) {
+int solution_clothes(vector<vector<string>> clothes) {
 	unordered_map<string, int> Parts;
 	int total = 0;
 	for (vector<string>& cloth : clothes)
@@ -289,7 +283,6 @@ vector<int> solution_deque(vector<string> operations) {
 문제 설명
 초 단위로 기록된 주식가격이 담긴 배열 prices가 매개변수로 주어질 때, 가격이 떨어지지 않은 기간은 몇 초인지를 return 하도록 solution 함수를 완성하세요.*/
 #include <stack>
-using namespace std;
 vector<int> solution(vector<int> prices) {
 	int count = prices.size();
 	vector<int> answer(count);
@@ -393,8 +386,6 @@ string solutionhighestnumber(vector<int> numbers) {
 
 ///////////////////////// 참고 
 /*모의고사*/
-using namespace std;
-
 vector<int> solutionexamination(vector<int> answers) {
 	vector<vector<int>> pattern = {
 		{1,2,3,4,5},
@@ -419,27 +410,48 @@ vector<int> solutionexamination(vector<int> answers) {
 
 ///////////////////////// 참고 
 /*소수찾기*/
+namespace primefind
+{
 #include <unordered_set>
 #include <cmath>
-using namespace std;
+#include <queue>
 
-void GetCombsR(const vector<char>& arr, int depth, string stack, vector<bool>& visits, unordered_set<int>& combs) {
+void GetComsTestR(const vector<char>& arr, int depth, string stack, vector<bool>& visits, unordered_set<int>& combs) {
 	if (depth >= arr.size()) return;
 	for (int i = 0; i < arr.size(); ++i) {
 		if (true == visits[i]) continue;
 		visits[i] = true;
 		stack.push_back(arr[i]);
 		combs.insert(stoi(stack));
-		GetCombsR(arr, depth + 1, stack, visits, combs);
+		GetComsTestR(arr, depth + 1, stack, visits, combs);
 		stack.pop_back();
 		visits[i] = false;
 	}
 }
 
-void GetCombs(const vector<char>& arr, unordered_set<int>& combs) {
+void GetComsTest(const vector<char>& arr, unordered_set<int>& combs) {
 	vector<bool> visits(arr.size(), false);
 	string stack;
-	GetCombsR(arr, 0, stack, visits, combs);
+	GetComsTestR(arr, 0, stack, visits, combs);
+}
+
+void GetComsTestQR(const vector<char>& arr, int depth, string stack, vector<bool>& visits, priority_queue<int>& combs) {
+	if (depth >= arr.size()) return;
+	for (int i = 0; i < arr.size(); ++i) {
+		if (true == visits[i]) continue;
+		visits[i] = true;
+		stack.push_back(arr[i]);
+		combs.push(stoi(stack));
+		GetComsTestQR(arr, depth + 1, stack, visits, combs);
+		stack.pop_back();
+		visits[i] = false;
+	}
+}
+
+void GetComsTestQ(const vector<char>& arr, priority_queue<int>& combs) {
+	vector<bool> visits(arr.size(), false);
+	string stack;
+	GetComsTestQR(arr, 0, stack, visits, combs);
 }
 
 bool IsPrimeSimple(int n) {
@@ -453,10 +465,13 @@ bool IsPrimeSimple(int n) {
 	return true;
 }
 
-int solutionfindprime(string nums) {
+int solution(string nums) {
 	vector<char> arr(nums.begin(), nums.end());
 	unordered_set<int> combs;
-	GetCombs(arr, combs);
+	GetComsTest(arr, combs);
+
+	priority_queue<int> combsq;
+	GetComsTestQ(arr, combsq);
 
 	vector<pair<int, bool>> isprimes(combs.size());
 	unordered_set<int>::iterator iter = combs.begin();
@@ -468,12 +483,12 @@ int solutionfindprime(string nums) {
 	int answer = 0;
 	return answer;
 }
+}
 ///////////////////////// 참고 //
 
 ///////////////////////// 참고
 /*타겟넘버 완전탐색*/
 #include <unordered_set>
-using namespace std;
 
 void GetCombsR(vector<bool> visits, int depth, vector<string>& combs) {
 	if (depth >= visits.size()){
@@ -551,7 +566,6 @@ int solutionnetwork(int n, vector<vector<int>> computers) {
 #include <cmath>
 #include <algorithm>
 
-using namespace std;
 int Find(vector<string>& words, string& target){
 	vector<string>::iterator it = std::find(words.begin(), words.end(), target);
 	if (it == words.end()) return -1;
@@ -607,8 +621,6 @@ int solutionwordsimilar(string begin, string target, vector<string> words) {
 #include <string>
 #include <vector>
 
-using namespace std;
-
 vector<string> solutiontairportpath(vector<vector<string>> tickets) {
 	vector<string> answer;
 	return answer;
@@ -619,8 +631,6 @@ vector<string> solutiontairportpath(vector<vector<string>> tickets) {
 /*체육복 탐욕법*/
 #include <string>
 #include <vector>
-
-using namespace std;
 
 int solutiontrainingwear(int n, vector<int> lost, vector<int> reserve) {
 	
@@ -634,7 +644,6 @@ int solutiontrainingwear(int n, vector<int> lost, vector<int> reserve) {
 #include <string>
 #include <vector>
 #include <algorithm>
-using namespace std;
 namespace fartestnode{
 struct Node {
 	int Idx = -1;
@@ -685,21 +694,19 @@ int solutionfarstnodetest01(int n, vector<vector<int>> edge) {
 }
 
 int solutionfarstnodetest02(int n, vector<vector<int>> edge) {
-	
+	int answer = 0;
+
+	return answer;
 }
 }
 ///////////////////////// 참고 // 
 
 ///////////////////////// 참고
-#include <string>
-#include <vector>
-#include <map>
-#include <functional>
-using namespace std;
 namespace cardscompare
 {
+
 vector<string> solutioncard(vector<string> card, vector<string> word) {
-	std::function<void(string&, map<char, int>&)> mapping = [](string& str, map<char, int>& wordmap) {
+	function<void(string&, map<char, int>&)> mapping = [](string& str, map<char, int>& wordmap) {
 		for (int j = 0; j < str.length(); ++j) {
 			wordmap[str[j]]++;
 		}
@@ -735,7 +742,7 @@ vector<string> solutioncard(vector<string> card, vector<string> word) {
 			}
 		}
 		if (true == noneany) continue;
-		bool alluse = std::find(uses.begin(), uses.end(), false) == uses.end();
+		bool alluse = find(uses.begin(), uses.end(), false) == uses.end();
 		if (true == alluse) {
 			answer.push_back(w);
 		}
@@ -747,13 +754,6 @@ vector<string> solutioncard(vector<string> card, vector<string> word) {
 ///////////////////////// 참고 //
 
 ///////////////////////// 참고
-#include <string>
-#include <vector>
-#include <functional>
-#include <iostream>
-
-using namespace std;
-
 long long solutionrobotrail(string block, int pos) {
 	std::function<int(char&)> getdir = [](char& c) {
 		if (c == '>') { c = '<'; return 1; }
@@ -783,7 +783,6 @@ long long solutionrobotrail(string block, int pos) {
 #include <vector>
 #include <cmath>
 
-using namespace std;
 namespace quadtreestring
 {
 struct CNode {
@@ -827,8 +826,218 @@ int solutionquadtree(string S1, string S2) {
 }
 ///////////////////////// 참고 //
 
+///////////////////////// 참고
+/* 스택 / 큐 : 다리를 지나는 트럭 */
+namespace truck
+{
+#include <string>
+#include <vector>
+#include <queue>
+#include <iostream>
+#include <map>
+
+struct Truck {
+	int W = 0;
+	int Idx = 0;
+	int T = 0;
+	Truck(int w, int idx) { W = w; Idx = idx; }
+	Truck(Truck& o, int t) { W = o.W; Idx = o.Idx; T = t; }
+};
+int solution(int bridge_length, int weight, vector<int> truck_weights) {
+	int answer = 0;
+	queue<Truck> queue01, queue02;
+	for (int i = 0; i < truck_weights.size(); ++i) {
+		int w = truck_weights[i];
+		queue01.push(Truck(w, i));
+	}
+	int w = 0, len = bridge_length;
+	cout << " 01 : " << queue01.size() << " /02 : " << queue02.size() << endl;
+	while (true != queue01.empty() || true != queue02.empty()) {
+		bool ispoped = false;
+		if (queue02.size() >= 1 && answer >= queue02.front().T) {
+			w = w - queue02.front().W;
+			cout << " pop 02 T : " << (queue02.front().T) << endl;
+			queue02.pop();
+			ispoped = true;
+		}
+
+		if (true != queue01.empty() && w + queue01.front().W <= weight) {
+			w += queue01.front().W;
+			cout << " push 02 T : " << (answer + len) << endl;
+			queue02.push(Truck(queue01.front(), answer + len));
+			queue01.pop();
+		}
+		answer++;
+	}
+	return answer;
+}
+}
+///////////////////////// 참고 //
+
+///////////////////////// 참고
+/* 스택 / 큐 : 프린터 */
+namespace printer
+{
+#include <string>
+#include <vector>
+#include <queue>
+#include <algorithm>
+
+struct Pr {
+	int P = -1;
+	int Idx = -1;
+	Pr(int p, int idx) { P = p; Idx = idx; }
+};
+int solution(vector<int> priorities, int location) {
+	priority_queue<int> pqueue;
+	queue<Pr> queue;
+	for (int i = 0; i < priorities.size(); ++i) {
+		queue.push(Pr(priorities[i], i));
+		pqueue.push(priorities[i]);
+	}
+
+	int answer = 0;
+	while (queue.empty() != true) {
+		Pr pr = queue.front();
+		queue.pop();
+
+		if (pr.P == pqueue.top()) {
+			pqueue.pop();
+			answer++;
+
+			if (pr.Idx == location) {
+				break;
+			}
+		}
+		else {
+			queue.push(pr);
+		}
+	}
+	return answer;
+}
+}
+///////////////////////// 참고 //
+
+namespace sumint
+{
+#include <string>
+#include <vector>
+#include <algorithm>
+
+void GetCombsR(const vector<int>& nums,
+			   int depth,
+			   int sum,
+			   int target,
+			   vector<int> stack,
+			   vector<bool>& visits,
+			   vector<vector<int>>& combs) {
+	if (depth >= nums.size()) return;
+	if (stack.size() >= 2) return;
+	for (int i = 0; i < nums.size(); ++i) {
+		if (true == visits[i]) continue;
+		visits[i] = true;
+		int sumnext = sum + nums[i];
+		if (sumnext > target) continue;
+		vector<int> stacknew = stack;
+		stacknew.push_back(i);
+		if (sumnext == target) {
+			combs.push_back(stacknew);
+			continue;
+		}
+		GetCombsR(nums, depth + 1, sumnext, target, stacknew, visits, combs);
+		visits[i] = false;
+	}
+}
+
+void GetCombs(const vector<int>& nums, vector<vector<int>>& combs, int target) {
+	vector<bool> visits(nums.size(), false);
+	vector<int> stack;
+	int sum = 0, depth = 0; 
+	GetCombsR(nums, depth, sum, target, stack, visits, combs);
+}
+
+vector<int> solution(vector<int> nums, int target) {
+	vector<vector<int>> combs;
+	GetCombs(nums, combs, target);
+	vector<int> answer;
+	sort(combs.begin(), combs.end());
+
+	if (combs.size() >= 1){
+		answer = combs[0];
+	}
+	return answer;
+}
+}
+
+namespace operatorstring
+{
+#include <string>
+#include <vector>
+
+int GetOp(char op, int num, int sum) {
+	switch (op) {
+	case '+':
+	sum += num; break;
+	case '-':
+	sum -= num; break;
+	case '*':
+	sum *= num; break;
+	case '/':
+	sum /= num; break;
+	}
+	return sum;
+}
+int GetNum(char c) { return c - '0'; }
+bool IsNum(char c) { return c >= '0' && c <= '9'; }
+bool IsDivByZero(char op, int num) { return op == '/' && num == 0; }
+string solution(string input) {
+	int sum = GetNum(input[0]);
+	string buf;
+	for (int i = 1; i < input.length(); i = i + 2) {
+		char op = input[i];
+		int num = GetNum(input[i+1]);
+		if (true == IsDivByZero(op, num))
+		{
+			return "Impossible";
+		}
+		sum = GetOp(op, num, sum);
+	}
+	string answer = to_string(sum);
+	return answer;
+}
+}
+
+namespace landarea
+{
+#include <string>
+#include <vector>
+
+struct Area {
+	int W = 0, H = 0;
+	int idxW = 0, idxH = 0;
+	bool IsSameSize(Area& o) { return (W == o.H && H == o.W) || (W == o.W && H == o.H); }
+	Area(int h, int w) { W = w; H = h; }
+};
+
+int solution(vector<int> buildingSize, vector<vector<int>> land) {
+	for (int w = 0; w < land.size(); ++w) {
+		vector<int>& vers = land[w];
+		for (int h = 0; h < vers.size(); ++h) {
+			int state = land[w][h];
+			if (state == 1) continue;
+
+		}
+	}
+	int answer = 0;
+	return answer;
+}
+}
+
 int main()
 {
+	//vector<string> phone_book = { "123","1235","12","567","88" };
+	//solution_phone_book(phone_book);
+
 	//vector<int> array = { 1, 5, 2, 6, 3, 7, 4 };
 	//vector<vector<int>> commands = { {2, 5, 3}, {4, 4, 1}, {1, 7, 3} };
 	//solutionsort01(array, commands);
@@ -839,8 +1048,8 @@ int main()
 	//string numfindprime = "7025361";
 	//string numfindprime = "17";
 	//string numfindprime = "702";
-	//string numfindprime = "01103899";
-	//solutionfindprime(numfindprime);
+	string numfindprime = "011038";
+	primefind::solution(numfindprime);
 
 	//vector<int> numbers = { 1, 1, 1, 1, 1 };
 	//int target = 3;
@@ -863,8 +1072,30 @@ int main()
 	//string block = ">><>>";
 	//int pos = 2;
 	//solutionrobotrail(block, pos);
-	string S1 = "ppwwwbpbbwwbw";
-	string S2 = "pwbwpwwbw";
-	solutionquadtree(S1, S2);
+	
+	//string S1 = "ppwwwbpbbwwbw";
+	//string S2 = "pwbwpwwbw";
+	//quadtreestring::solutionquadtree(S1, S2);
+
+	//int bridge_length = 2;
+	//int weight = 10;
+	//vector<int> truck_weights = { 7,4,5,6 };
+	//truck::solution(bridge_length, weight, truck_weights);
+
+	//int location = 5;
+	////vector<int> priorities = { 2,1,3,2 };
+	//vector<int> priorities = { 1,1,9,1,1,1 };
+	//printer::solution(priorities, location);
+
+	//vector<int> nums = { 1, 2, 3, 4, 5 };
+	//int target = 6;
+	//sumint::solution(nums, target);
+	//string input = "2+3";
+	//operatorstring::solution(input);
+
+	//vector<int> buildingSize;
+	//vector<vector<int>> land;
+	//landarea::solution(buildingSize, land);
+
 	return 0;
 }
