@@ -1,4 +1,4 @@
-// https://www.codingame.com/ide/puzzle/skynet-revolution-episode-2 test. pass all.
+// https://www.codingame.com/ide/puzzle/skynet-revolution-episode-2 test. 
 
 #pragma once
 #include <iostream>
@@ -9,7 +9,7 @@
 
 using namespace std;
 
-// First alpha.
+// First cntRelate.
 // Resolve double decision.
 
 typedef unsigned int uint;
@@ -33,7 +33,6 @@ private:
 	uint _weightToGoal = 0;
 	int _nodeToGoal = NULL_NODE;
 	bool _isGoal = false;
-	bool _isVisited = false;
 
 	vector<int> _adjs;
 	vector<int> _adjsGoal;
@@ -55,7 +54,7 @@ private:
 	}
 
 	template<typename T>
-	static bool AddNotOverlap(vector<T> &v, const T t)
+	static bool AddNotOverlap(vector<T>& v, const T t)
 	{
 		typedef typename vector<T>::iterator iter_v;
 
@@ -70,7 +69,7 @@ private:
 	}
 
 	template<typename T>
-	static bool IsExist(vector<T> &v, const T t)
+	static bool Contains(vector<T>& v, const T t)
 	{
 		typedef typename vector<T>::iterator iter_v;
 
@@ -191,26 +190,36 @@ public:
 		MappingMulti();
 	}
 
-	struct Degree
+	struct Dist
 	{
 		Node* _node;
-		int _degree;
-		int _alpha;
-		Degree(Node* node, int degree, int alpha)
+		int _dist;
+		int _cntRelate;
+		Dist(Node* node, int dist, int cntRelate)
 		{
-			_node = node; _degree = degree; _alpha = alpha;
+			_node = node; _dist = dist; _cntRelate = cntRelate;
 		}
 	};
 
-	static bool CompareDegree(Degree& a, Degree& b)
+	static bool CompareDegree(Dist& a, Dist& b)
 	{
-		if (a._alpha == NULL_NODE && b._alpha == NULL_NODE)
+		//@TEST 01
+		//if (a._cntRelate == b._cntRelate)
+		//{
+		//	return a._dist < b._dist;
+		//}
+
+		//return a._cntRelate > b._cntRelate;
+
+		//@TEST 02
+		if (a._cntRelate == NULL_NODE && b._cntRelate == NULL_NODE)
 		{
-			return a._degree > b._degree;
+			//return a._dist > b._dist;
+			return a._dist < b._dist;
 		}
 		else
 		{
-			return a._alpha > b._alpha;
+			return a._cntRelate > b._cntRelate;
 		}
 	}
 
@@ -230,28 +239,25 @@ public:
 		bool isResolved = false;
 		if (true == USE_PREDICT && 3 == wayToGoal.size() && 1 <= NodesHasMultiGoal.size())
 		{
-			vector<Degree> degrees;
+			vector<Dist> dists;
 			for (int i = 0; i < NodesHasMultiGoal.size(); ++i)
 			{
-				int alpha = NULL_NODE;
+				int cntRelate = NULL_NODE;
 				Node* nodeTarget = GetNode(NodesHasMultiGoal[i]);
-				int degree = GetDistByRelate(N, nodeTarget, alpha);
-				//if (alpha != NULL_NODE)
-				//{
-				//	cerr << ">>>>> Alpha:" << i << "/alpha" << alpha << endl;
-				//}
-				degrees.push_back(Degree(nodeTarget, degree, alpha));
+				int dist = GetDistByRelate(N, nodeTarget, cntRelate);
+				//cerr << ">>>>> add dist :" << i << "/cntRelate" << cntRelate << endl;
+				dists.push_back(Dist(nodeTarget, dist, cntRelate));
 			}
 
 			Node* resolve = GetNode(NodesHasMultiGoal[0]);
-			if (degrees.size() >= 2)
+			if (dists.size() >= 2)
 			{
-				std::sort(degrees.begin(), degrees.end(), CompareDegree);
-				//for (int i = 0; i < degrees.size(); ++i)
-				//{
-				//	cerr << ">>>>> sorted:" << i << "/" << degrees[i]._degree << endl;
-				//}
-				resolve = degrees[0]._node;
+				std::sort(dists.begin(), dists.end(), CompareDegree);
+				for (int i = 0; i < dists.size(); ++i)
+				{
+					cerr << ">>>>> dists(" << dists.size() << ")/idx:" << i << "/dist:" << dists[i]._dist << "/cntRelate:" << dists[i]._cntRelate << endl;
+				}
+				resolve = dists[0]._node;
 			}
 
 			Node* check = GetNode(wayToGoal[1]);
@@ -278,15 +284,14 @@ public:
 		return GetNode(nodeStart)->GetNodeToGoal();
 	}
 
-	static void GetDistByRelateR(Node* from, Node* find, int degree, vector<Node*> path, int& dist_out, vector<Node*>& path_out)
+	static void GetDistByRelateR(Node* from, Node* find, int dist, vector<Node*> path, int& dist_out, vector<Node*>& path_out)
 	{
 		if (from->_adjs.size() <= 0 || dist_out != NULL_NODE)
 		{
 			return;
 		}
 
-		from->_isVisited = true;
-		degree++;
+		dist++;
 
 		vector<Node*> pathUse = path;
 		pathUse.push_back(from);
@@ -297,47 +302,42 @@ public:
 				return;
 
 			Node* iter = GetNode(from->_adjs[i]);
-			if (true == iter->_isVisited || true == iter->_isGoal)
+			if (true == Contains(pathUse, iter) || true == iter->_isGoal)
 				continue;
 
 			if (iter == find)
 			{
-				dist_out = degree;
+				dist_out = dist;
 				pathUse.push_back(iter);
 				path_out = pathUse;
-				//cerr << ">>>>>>>>>> found : " << find->_idx << "/dist_out:" << degree << endl;
-				return;
+				cerr << ">>>>>>>>>> found : " << find->_idx << "/dist_out:" << dist << "/count:" << pathUse.size() << endl;
+				//return;
 			}
 
-			GetDistByRelateR(iter, find, degree, pathUse, dist_out, path_out);
+			GetDistByRelateR(iter, find, dist, pathUse, dist_out, path_out);
 		}
 	}
 
-	static int GetDistByRelate(Node* from, Node* to, int& priority_out)
+	static int GetDistByRelate(Node* from, Node* to, int& cntRelate_out)
 	{
-		for (int i = 0; i < Nodes.size(); ++i)
-		{
-			Nodes[i]->_isVisited = false;
-		}
-
-		int degree = 0, dist = NULL_NODE;
+		int dist = 0, distReturn = NULL_NODE;
 		vector<Node*> path; vector<Node*> pathResult;
-		GetDistByRelateR(from, to, degree, path, dist, pathResult);
-		int countRelate = 0;
+		GetDistByRelateR(from, to, dist, path, distReturn, pathResult);
+		int cntRelate = 0;
 		if (pathResult.size() >= 1)
 		{
 			for (int i = 0; i < pathResult.size(); ++i)
 			{
 				Node* iter = pathResult[i];
-				if (iter->IsAdjsGoalAny() == true) { countRelate++; }
+				if (iter->IsAdjsGoalAny() == true) { cntRelate++; }
 			}
 
-			priority_out = countRelate;
+			cntRelate_out = cntRelate;
 		}
 
-		//cerr << ">>>>>>>>>> GetDistByRelate vector:" << pathResult.size() << "/dist:" << dist << "/countRelate:" << countRelate << endl;
-
-		return dist;
+		//cerr << ">>>>>>>>>> GetDistByRelate vector:" << pathResult.size() << "/dist:" << dist << "/cntRelate:" << cntRelate << endl;
+		//return distReturn;
+		return pathResult.size();
 	}
 
 public:
@@ -433,7 +433,7 @@ public:
 
 		for (uint i = 0; i < _adjs.size(); ++i)
 		{
-			//isExist = IsExist(Goals, _adjs[i]);
+			//isExist = Contains(Goals, _adjs[i]);
 			isExist = true == Nodes[_adjs[i]]->IsGoal();
 			if (true == isExist)
 			{

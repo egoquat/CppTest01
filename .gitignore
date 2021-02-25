@@ -27,3 +27,8 @@ SolutionTest_C++.sdf
 *.exe
 *.idb
 *.user
+*.db
+*.db-shm
+*.db-wal
+*.opendb
+.vs/SolutionTest_C++/v16/.suo
