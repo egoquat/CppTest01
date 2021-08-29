@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <functional>
 #include <map>
 
 #define NULL_NODE -1
@@ -113,11 +114,11 @@ public:
 	{
 		Node* node = GetNode(nodeA);
 		node->RemoveAdj(nodeB);
-		std::remove(NodeAdjMultiGoals.begin(), NodeAdjMultiGoals.end(), nodeA);
-
+		Node::Remove(NodeAdjMultiGoals, nodeA);
+		
 		node = GetNode(nodeB);
 		node->RemoveAdj(nodeA);
-		std::remove(NodeAdjMultiGoals.begin(), NodeAdjMultiGoals.end(), nodeB);
+		Node::Remove(NodeAdjMultiGoals, nodeB);
 	}
 
 	static void SetAsGoal(int g)
@@ -325,7 +326,7 @@ public:
 		}
 
 		wayToGoal_out = pathToGoal;
-		//cerr << ">> Way To Goal" << endl;
+		cerr << ">> don GetAgentToGoal " << pathToGoal.size() << endl;
 	}
 
 	static int GetDistAgent(Node* agent, Node* to, int& cntAdjGoal_out)
@@ -359,7 +360,7 @@ public:
 		for (int i = 0; i < _adjs.size(); ++i)
 		{
 			Node* adj = Nodes[_adjs[i]];
-			if (true == adj->_isGoal) ++countGoal;
+			if (adj->_isGoal == true && adj->_isActive) ++countGoal;
 		}
 		return 2 <= countGoal;
 	}
