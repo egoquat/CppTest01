@@ -160,8 +160,13 @@ public:
 		}
 		else
 		{
-			//return a._cntAdjGoal < b._cntAdjGoal;
-			return (a._dist - a._cntAdjGoal) < (b._dist - b._cntAdjGoal);
+			int priorityA = a._dist - a._cntAdjGoal;
+			int priorityB = b._dist - b._cntAdjGoal;
+			if (priorityA == priorityB)
+			{
+				a._dist > b._dist;
+			}
+			return priorityA < priorityB;
 		}
 	}
 
@@ -237,8 +242,6 @@ public:
 		Node* found = nullptr;
 		NNode* foundNnode = nullptr;
 
-		cerr << ">> GetPathNearstBfsRecurse" << (find == nullptr ? "Goal" : "Find") << " dist:" << dist << endl;
-
 		for (int i = 0; i < froms.size(); ++i)
 		{
 			NNode* nnode = &froms[i];
@@ -248,7 +251,7 @@ public:
 				if (node->_isActive == false) continue;
 				if ((find == nullptr && node->_isGoal == true) || (find != nullptr && node == find))
 				{
-					cerr << ">>> GetPathNearstBfsRecurse _isGoal :" << node->_idx << "/dist:" << dist << endl;
+					//cerr << ">>> GetPathNearstBfsRecurse _isGoal :" << node->_idx << "/dist:" << dist << endl;
 					found = node; foundNnode = nnode;
 					break;
 				}
@@ -295,8 +298,8 @@ public:
 			{
 				int cntAdjGoal = 0;
 				Node* nodeMulti = GetNode(NodeAdjMultiGoals[i]);
-				int dist = GetDistAgent(agent, nodeMulti, cntAdjGoal);
-				//cerr << ">>>>> add dist:" << dist << "/" << "/nodeAgent:" << nodeAgent << "/target:" << nodeTarget->_idx << "/cntAdjGoal:" << cntAdjGoal << endl;
+				int dist = GetDistAgent(GetNode(pathToGoal[1]), nodeMulti, cntAdjGoal);
+				cerr << ">>> add dist:" << dist << "/cntAdjGoal:" << cntAdjGoal << "/priority:" << (dist - cntAdjGoal) << "/nodeAgent:" << nodeAgent << "/target:" << nodeMulti->_idx << endl;
 				dists.push_back(Dist(nodeMulti, dist, cntAdjGoal));
 			}
 
@@ -306,7 +309,7 @@ public:
 				std::sort(dists.begin(), dists.end(), CompareDegree);
 				//for (int i = 0; i < dists.size(); ++i)
 				//{
-				//	cerr << ">>>>> i:" << i << "/dist:" << dists[i]._dist << "/idx:" << dists[i]._node->_idx << "/cntAdjGoal:" << dists[i]._cntAdjGoal << endl;
+				//	cerr << ">>> i:" << i << "/dist:" << dists[i]._dist << "/idx:" << dists[i]._node->_idx << "/cntAdjGoal:" << dists[i]._cntAdjGoal << endl;
 				//}
 				resolve = dists[0]._node;
 			}
