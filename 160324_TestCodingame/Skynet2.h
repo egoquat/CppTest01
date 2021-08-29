@@ -164,7 +164,7 @@ public:
 			int priorityB = b._dist - b._cntAdjGoal;
 			if (priorityA == priorityB)
 			{
-				a._dist > b._dist;
+				return a._dist > b._dist;
 			}
 			return priorityA < priorityB;
 		}
