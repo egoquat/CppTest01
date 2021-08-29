@@ -202,12 +202,85 @@ public:
 		}
 	}
 
+	struct NNode
+	{
+		NNode* _root = nullptr;
+		NNode* _parent = nullptr;
+		Node* _node = nullptr;
+		vector<NNode*> childs;
+		bool _isRoot = false;
+
+		void AddChild(NNode* childNode) 
+		{
+			childs.push_back(childNode);
+		}
+
+		NNode(Node* node, NNode* parent)
+		{
+			_node = node; _parent = parent; _root = parent->_root;
+		}
+
+		NNode(Node* node, bool isRoot = false) 
+		{
+			_node = node; if (isRoot == true) 
+			{
+				_root = this; 
+				_isRoot = true;
+			}
+		}
+	};
+
+	static void GetPathNearstBfsRecurse(vector<NNode>& froms, int dist, vector<int>& path_out, int& dist_out)
+	{
+		dist++;
+		vector<NNode> newFroms;
+		Node* found = nullptr;
+		NNode* foundNnode = nullptr;
+		
+		for(int i = 0; i < froms.size(); ++i)
+		{
+			NNode* nnode = &froms[i];
+			for (int j = 0; j < nnode->_node->_adjs.size(); ++j)
+			{
+				Node* node = GetNode(nnode->_node->_adjs[j]);
+				if (node->_isActive == false) continue;
+				if (node->_isGoal == true)
+				{
+					found = node; foundNnode = nnode;
+					break;
+				}
+				newFroms.push_back(NNode(node, nnode));
+			}
+			if (found != nullptr) break;
+		}
+
+		if (found != nullptr)
+		{
+			path_out.insert(path_out.begin(), found->_idx);
+			NNode* iter = foundNnode;
+			while(true)
+			{
+				path_out.insert(path_out.begin(), iter->_node->_idx);
+				if (iter->_isRoot) break;
+				iter = iter->_parent;
+			}
+		}
+
+		GetPathNearstBfsRecurse(newFroms, dist, path_out, dist_out);
+	}
+
 	static void GetAgentToGoal(int nodeAgent, vector<int>& wayToGoal_out)
 	{
-		vector<int> pathToGoal, path;
-		int dist = 0, dist_out = 9999999;
+		//vector<int> pathToGoal, path;
+		//int dist = 0, dist_out = 9999999;
+		//Node* agent = GetNode(nodeAgent);
+		//GetPathNearstRecurse(agent, dist, path, dist_out, pathToGoal);
+
+		vector<int> pathToGoal;
+		int dist = 0,dist_out = 9999999;
 		Node* agent = GetNode(nodeAgent);
-		GetPathNearstRecurse(agent, dist, path, dist_out, pathToGoal);
+		vector<NNode> froms{ NNode(agent, true) };
+		GetPathNearstBfsRecurse(froms, dist, pathToGoal, dist_out);
 
 		cerr << ">> pathToGoal" << pathToGoal.size() << " NodeAdjMultiGoals" << NodeAdjMultiGoals.size() << endl;
 
