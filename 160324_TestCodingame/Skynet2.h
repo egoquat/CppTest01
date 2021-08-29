@@ -5,7 +5,6 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-#include <functional>
 #include <map>
 
 #define NULL_NODE -1
@@ -171,43 +170,6 @@ public:
 		}
 	}
 
-	static void GetPathNearstRecurse(Node* from, int dist, vector<int> path, int& dist_out, vector<int>& path_out)
-	{
-		dist++;
-		if (dist_out <= dist) return;
-
-		cerr << ">> GetPathNearstRecurse dist:" << dist << endl;
-		path.push_back(from->_idx);
-
-		if (from->_isGoal == true)
-		{
-			dist_out = dist;
-			path_out = path;
-			cerr << ">>>>> GetPathNearstRecurse _isGoal :" << from->_idx << "/dist:" << dist << endl;
-			return;
-		}
-
-		vector<int>::iterator iterGoal = std::find_if(from->_adjs.begin(), from->_adjs.end(),
-			[&](const int iter) { return GetNode(iter)->_isActive && GetNode(iter)->_isGoal; });
-		if (iterGoal != from->_adjs.end())
-		{
-			dist_out = dist + 1;
-			path.push_back(*iterGoal);
-			path_out = path;
-			return;
-		}
-
-		for (int i = 0; i < from->_adjs.size(); ++i)
-		{
-			int idxAdj = from->_adjs[i];
-			if (Contains(path, idxAdj) == true)
-				continue;
-			Node* adj = GetNode(idxAdj);
-			if (adj->_isActive == false) continue;
-			GetPathNearstRecurse(adj, dist, path, dist_out, path_out);
-		}
-	}
-
 	struct NNode
 	{
 		NNode* _root = nullptr;
@@ -279,11 +241,6 @@ public:
 
 	static void GetAgentToGoal(int nodeAgent, vector<int>& wayToGoal_out)
 	{
-		//vector<int> pathToGoal, path;
-		//int dist = 0, dist_out = 9999999;
-		//Node* agent = GetNode(nodeAgent);
-		//GetPathNearstRecurse(agent, dist, path, dist_out, pathToGoal);
-
 		vector<int> pathToGoal;
 		int dist = 0, dist_out = 9999999;
 		Node* agent = GetNode(nodeAgent);
@@ -308,10 +265,6 @@ public:
 			if (dists.size() >= 2)
 			{
 				std::sort(dists.begin(), dists.end(), CompareDegree);
-				//for (int i = 0; i < dists.size(); ++i)
-				//{
-				//	cerr << ">>> i:" << i << "/dist:" << dists[i]._dist << "/idx:" << dists[i]._node->_idx << "/cntAdjGoal:" << dists[i]._cntAdjGoal << endl;
-				//}
 				resolve = dists[0]._node;
 			}
 
