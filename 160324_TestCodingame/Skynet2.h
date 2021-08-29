@@ -8,11 +8,8 @@
 #include <map>
 
 #define NULL_NODE -1
-#define MAX_UINT 0xffffffff
 
 using namespace std;
-
-typedef unsigned int uint;
 
 class Node
 {
@@ -58,16 +55,15 @@ private:
 
 	static Node* Root;
 	static vector<int> Goals;
-	static vector<int> NodesHasMultiGoal;
+	static vector<int> NodeAdjMultiGoals;
 	static vector<Node*> Nodes;
-	static uint CntNode;
+	static int CntNode;
 	static int CntTest;
 
-	uint _distanceToGoal = MAX_UINT;
+public:
 	vector<int> _adjs;
 	vector<int> _adjsGoal;
 
-public:
 	int _idx = NULL_NODE;
 	int _nodeToGoal = NULL_NODE;
 	bool _isGoal = false;
@@ -94,7 +90,7 @@ public:
 	{
 		if (0 == CntNode) return;
 
-		for (uint i = 0; i < CntNode; ++i)
+		for (int i = 0; i < CntNode; ++i)
 		{
 			Node* n = Nodes[i];
 			delete n;
@@ -106,51 +102,40 @@ public:
 
 	static void AddLink(const int nodeA, const int nodeB)
 	{
-		Node* N = GetNode(nodeA);
-		N->AddAdj(nodeB);
+		Node* node = GetNode(nodeA);
+		AddNotOverlap(node->_adjs, nodeB);
 
-		N = GetNode(nodeB);
-		N->AddAdj(nodeA);
+		node = GetNode(nodeB);
+		AddNotOverlap(node->_adjs, nodeA);
 	}
 
 	static void RemoveLink(const int nodeA, const int nodeB)
 	{
-		Node* N = GetNode(nodeA);
-		N->RemoveAdj(nodeB);
-		N = GetNode(nodeB);
-		N->RemoveAdj(nodeA);
+		Node* node = GetNode(nodeA);
+		node->RemoveAdj(nodeB);
+		std::remove(NodeAdjMultiGoals.begin(), NodeAdjMultiGoals.end(), nodeA);
 
-		//for (uint i = 0; i < CntNode; ++i)
-		//	Nodes[i]->Reset();
-
-		//for (uint i = 0; i < Goals.size(); ++i)
-		//	GetNode(Goals[i])->MapDist();
-
-		SetMapToGoal();
+		node = GetNode(nodeB);
+		node->RemoveAdj(nodeA);
+		std::remove(NodeAdjMultiGoals.begin(), NodeAdjMultiGoals.end(), nodeB);		
 	}
 
 	static void SetAsGoal(int g)
 	{
 		Node* goal = GetNode(g);
 		goal->SetGoal();
-		goal->MapDist();
 	}
 
-	static void SetMapToGoal()
+	static void SetMultiGoals()
 	{
-		NodesHasMultiGoal.clear();
-		for (uint i = 0; i < Goals.size(); ++i)
-		{
-			GetNode(Goals[i])->MapFromGoal();
-		}
-
-		for (uint i = 0; i < CntNode; ++i)
+		NodeAdjMultiGoals.clear();
+		for (int i = 0; i < CntNode; ++i)
 		{
 			Node* n = Nodes[i];
 
 			if (n->_adjsGoal.size() >= 2)
 			{
-				AddNotOverlap(NodesHasMultiGoal, n->_idx);
+				AddNotOverlap(NodeAdjMultiGoals, n->_idx);
 			}
 		}
 	}
@@ -160,6 +145,7 @@ public:
 		Node* _node;
 		int _dist;
 		int _cntAdjGoal;
+
 		Dist(Node* node, int dist, int cntAdjGoal)
 		{
 			_node = node; _dist = dist; _cntAdjGoal = cntAdjGoal;
@@ -177,34 +163,67 @@ public:
 			//return a._cntAdjGoal < b._cntAdjGoal;
 			return (a._dist - a._cntAdjGoal) < (b._dist - b._cntAdjGoal);
 		}
-
 	}
 
-	static void GetWayToGoal(int nodeAgent, vector<int>& wayToGoal_out)
+	static void GetPathNearstRecurse(Node* from, int dist, vector<int> path, int& dist_out, vector<int>& path_out)
 	{
-		vector<int> wayToGoal;
-		Node* agent = GetNode(nodeAgent);
-		wayToGoal.push_back(agent->_idx);
+		dist++;
+		if (dist_out <= dist) return;
 
-		while (agent->_isGoal == false)
+		cerr << ">> GetPathNearstRecurse dist:" << dist << endl;
+		path.push_back(from->_idx);
+
+		if (from->_isGoal == true)
 		{
-			agent = GetNode(agent->_nodeToGoal);
-			wayToGoal.push_back(agent->_idx);
+			dist_out = dist;
+			path_out = path;
+			cerr << ">>>>> GetPathNearstRecurse _isGoal :" << from->_idx << "/dist:" << dist << endl;
+			return;
 		}
 
-		if (3 == wayToGoal.size() && 1 <= NodesHasMultiGoal.size())
+		vector<int>::iterator iterGoal = std::find_if(from->_adjs.begin(), from->_adjs.end(), 
+			[&](const int iter) { return GetNode(iter)->_isActive && GetNode(iter)->_isGoal; });
+		if (iterGoal != from->_adjs.end())
+		{
+			dist_out = dist + 1;
+			path.push_back(*iterGoal);
+			path_out = path;
+			return;
+		}
+
+		for (int i = 0; i < from->_adjs.size(); ++i)
+		{
+			int idxAdj = from->_adjs[i];
+			if (Contains(path, idxAdj) == true)
+				continue;
+			Node* adj = GetNode(idxAdj);
+			if (adj->_isActive == false) continue;
+			GetPathNearstRecurse(adj, dist, path, dist_out, path_out);
+		}
+	}
+
+	static void GetAgentToGoal(int nodeAgent, vector<int>& wayToGoal_out)
+	{
+		vector<int> pathToGoal, path;
+		int dist = 0, dist_out = 9999999;
+		Node* agent = GetNode(nodeAgent);
+		GetPathNearstRecurse(agent, dist, path, dist_out, pathToGoal);
+
+		cerr << ">> pathToGoal" << pathToGoal.size() << " NodeAdjMultiGoals" << NodeAdjMultiGoals.size() << endl;
+
+		if (3 == pathToGoal.size() && 1 <= NodeAdjMultiGoals.size())
 		{
 			vector<Dist> dists;
-			for (int i = 0; i < NodesHasMultiGoal.size(); ++i)
+			for (int i = 0; i < NodeAdjMultiGoals.size(); ++i)
 			{
 				int cntAdjGoal = 0;
-				Node* nodeTarget = GetNode(NodesHasMultiGoal[i]);
-				int dist = GetDistAgent(agent, nodeTarget, cntAdjGoal);
+				Node* nodeMulti = GetNode(NodeAdjMultiGoals[i]);
+				int dist = GetDistAgent(agent, nodeMulti, cntAdjGoal);
 				//cerr << ">>>>> add dist:" << dist << "/" << "/nodeAgent:" << nodeAgent << "/target:" << nodeTarget->_idx << "/cntAdjGoal:" << cntAdjGoal << endl;
-				dists.push_back(Dist(nodeTarget, dist, cntAdjGoal));
+				dists.push_back(Dist(nodeMulti, dist, cntAdjGoal));
 			}
 
-			Node* resolve = GetNode(NodesHasMultiGoal[0]);
+			Node* resolve = GetNode(NodeAdjMultiGoals[0]);
 			if (dists.size() >= 2)
 			{
 				std::sort(dists.begin(), dists.end(), CompareDegree);
@@ -215,7 +234,7 @@ public:
 				resolve = dists[0]._node;
 			}
 
-			Node* check = GetNode(wayToGoal[1]);
+			Node* check = GetNode(pathToGoal[1]);
 			if (1 >= check->_adjsGoal.size())
 			{
 				AddNotOverlap(wayToGoal_out, resolve->_idx);
@@ -225,20 +244,16 @@ public:
 			}
 		}
 
-		wayToGoal_out = wayToGoal;
+		wayToGoal_out = pathToGoal;
 		//cerr << ">> Way To Goal" << endl;
-	}
-
-	static int GetNextWayToGoal(int nodeStart)
-	{
-		return GetNode(nodeStart)->_nodeToGoal;
 	}
 
 	static int GetDistAgent(Node* agent, Node* to, int& cntAdjGoal_out)
 	{
 		int dist = 0, distReturn = NULL_NODE;
-		vector<Node*> path; vector<Node*> pathResult;
+		vector<Node*> pathResult, path;
 		GetDistAgentRecurse(agent, to, dist, path, distReturn, pathResult);
+
 		int cntAdjGoal = 0;
 		if (pathResult.size() >= 1)
 		{
@@ -260,9 +275,6 @@ public:
 
 		vector<Node*> pathUse = path;
 		pathUse.push_back(from);
-
-		CntTest++;
-		//cerr << ">> call GetDistAgentRecurse :" << CntTest << endl;
 
 		for (int i = 0; i < from->_adjs.size(); ++i)
 		{
@@ -292,7 +304,7 @@ public:
 		for (int i = 0; i < _adjs.size(); ++i)
 		{
 			Node* adj = Nodes[_adjs[i]];
-			countGoal = countGoal + (true == adj->_isGoal ? 1 : 0);
+			if (true == adj->_isGoal) ++countGoal;
 		}
 		return 2 <= countGoal;
 	}
@@ -301,110 +313,23 @@ public:
 	{
 		if (_isGoal) return false;
 		AddNotOverlap(_adjsGoal, idxGoal);
-		//if (_adjsGoal.size() >= 2)
-		//{
-		//	cerr << ">>> Has MultiGoal : " << _idx << "/Count:" << _adjsGoal.size() << endl;
-		//}
 		return true;
 	}
 
 	void SetGoal()
 	{
 		_isGoal = true;
-		_distanceToGoal = 0;
 		AddNotOverlap(Goals, _idx);
-	}
-
-	void Reset()
-	{
-		_nodeToGoal = NULL_NODE;
-
-		if (true == _isGoal)
-		{
-			_distanceToGoal = 0;
-		}
-		else
-		{
-			_distanceToGoal = MAX_UINT;
-		}
+		for (int i = 0; i < _adjs.size(); ++i) GetNode(_adjs[i])->AddAdjGoal(_idx);
 	}
 
 private:
-	void MapDist()
-	{
-		static uint counting = 0;
-		MapDistRecurse(_idx, 0, counting);
-	}
-
-	void MapDistRecurse(const int from, const uint distance, uint& counting)
-	{
-		if (distance > _distanceToGoal)
-		{
-			return;
-		}
-
-		uint D = distance;
-
-		if (D < _distanceToGoal)
-		{
-			_distanceToGoal = D;
-			//cerr << " " << _idx << " D:" << _distanceToGoal << endl;
-		}
-
-		D = D + 1;
-		counting = counting + 1;
-
-		for (uint i = 0; i < _adjs.size(); ++i)
-		{
-			if (_adjs[i] == from) continue;
-			GetNode(_adjs[i])->MapDistRecurse(_idx, D, counting);
-		}
-	}
-
-	void MapFromGoal()
-	{
-		if (false == _isGoal) return;
-
-		static uint counting = 0;
-		MapFromGoalRecurse(_idx, _distanceToGoal, counting);
-
-		for (int i = 0; i < _adjs.size(); ++i)
-		{
-			Node* adj = GetNode(_adjs[i]);
-			bool isAdded = adj->AddAdjGoal(_idx);
-		}
-	}
-
-	void MapFromGoalRecurse(const int from, const uint distance, uint& counting)
-	{
-		if (distance > _distanceToGoal) return;
-
-		_nodeToGoal = from;
-
-		uint dist = distance;
-		dist = dist + 1;
-		counting = counting + 1;
-
-		for (uint i = 0; i < _adjs.size(); ++i)
-		{
-			Node* adj = GetNode(_adjs[i]);
-			if (adj->_isActive == false) continue;
-
-			if (false == adj->_isGoal)
-			{
-				adj->MapFromGoalRecurse(_idx, dist, counting);
-			}
-		}
-	}
-
-	void AddAdj(const int a)
-	{
-		AddNotOverlap(_adjs, a);
-	}
-
 	void RemoveAdj(const int a)
 	{
 		Remove(_adjs, a); Remove(_adjsGoal, a);
+		vector<int>::iterator found = std::find_if(_adjs.begin(), _adjs.end(), [](const int iter) { return GetNode(iter)->_isActive; });
+		if (found == _adjs.end())
+			_isActive = false;
 	}
 
 	Node(int node)
@@ -422,8 +347,8 @@ private:
 Node* Node::Root = nullptr;
 vector<Node*> Node::Nodes;
 vector<int> Node::Goals;
-vector<int> Node::NodesHasMultiGoal;
-uint Node::CntNode = 0;
+vector<int> Node::NodeAdjMultiGoals;
+int Node::CntNode = 0;
 int Node::CntTest = 0;
 
 int main()
@@ -438,40 +363,40 @@ int main()
 	cerr << std::to_string(N) << " " << std::to_string(L) << " " << std::to_string(E) << endl;
 
 	for (int i = 0; i < L; i++) {
-		int N1; // N1 and N2 defines a link between these nodes
+		int N1;
 		int N2;
 		cin >> N1 >> N2; cin.ignore();
-
 		Node::AddLink(N1, N2);
 	}
 
 	for (int i = 0; i < E; i++) {
-		int EI; // the index of a gateway node
+		int EI; // gateway node
 		cin >> EI; cin.ignore();
 		Node::SetAsGoal(EI);
 	}
 
-	Node::SetMapToGoal();
+	Node::SetMultiGoals();
 
-	vector<int> wayToGoal;
+	vector<int> pathToGoal;
 
-	// game loop
 	while (1)
 	{
 		int SI;
 		cin >> SI; cin.ignore();
 
-		wayToGoal.clear();
-		Node::GetWayToGoal(SI, wayToGoal);
-		if (wayToGoal.size() >= 2)
+		pathToGoal.clear();
+		Node::GetAgentToGoal(SI, pathToGoal);
+		if (pathToGoal.size() >= 2)
 		{
-			int parent = wayToGoal[wayToGoal.size() - 2];
-			int child = wayToGoal[wayToGoal.size() - 1];
+			int parent = pathToGoal[pathToGoal.size() - 2];
+			int child = pathToGoal[pathToGoal.size() - 1];
 
-			//cerr << "wayToGoal: " << parent << " " << child << endl;
+			//cerr << "pathToGoal: " << parent << " " << child << endl;
 			cout << parent << " " << child << endl;
 
+			cerr << ">> RemoveLink" << endl;
 			Node::RemoveLink(parent, child);
+			cerr << ">> Done RemoveLink" << endl;
 		}
 	}
 
