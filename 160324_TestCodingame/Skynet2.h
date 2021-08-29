@@ -117,7 +117,7 @@ public:
 
 		node = GetNode(nodeB);
 		node->RemoveAdj(nodeA);
-		std::remove(NodeAdjMultiGoals.begin(), NodeAdjMultiGoals.end(), nodeB);		
+		std::remove(NodeAdjMultiGoals.begin(), NodeAdjMultiGoals.end(), nodeB);
 	}
 
 	static void SetAsGoal(int g)
@@ -181,7 +181,7 @@ public:
 			return;
 		}
 
-		vector<int>::iterator iterGoal = std::find_if(from->_adjs.begin(), from->_adjs.end(), 
+		vector<int>::iterator iterGoal = std::find_if(from->_adjs.begin(), from->_adjs.end(),
 			[&](const int iter) { return GetNode(iter)->_isActive && GetNode(iter)->_isGoal; });
 		if (iterGoal != from->_adjs.end())
 		{
@@ -210,7 +210,7 @@ public:
 		vector<NNode*> childs;
 		bool _isRoot = false;
 
-		void AddChild(NNode* childNode) 
+		void AddChild(NNode* childNode)
 		{
 			childs.push_back(childNode);
 		}
@@ -220,32 +220,35 @@ public:
 			_node = node; _parent = parent; _root = parent->_root;
 		}
 
-		NNode(Node* node, bool isRoot = false) 
+		NNode(Node* node, bool isRoot = false)
 		{
-			_node = node; if (isRoot == true) 
+			_node = node; if (isRoot == true)
 			{
-				_root = this; 
+				_root = this;
 				_isRoot = true;
 			}
 		}
 	};
 
-	static void GetPathNearstBfsRecurse(vector<NNode>& froms, int dist, vector<int>& path_out, int& dist_out)
+	static void GetPathNearstBfsRecurse(vector<NNode>& froms, int dist, Node* find, vector<int>& path_out, int& dist_out)
 	{
 		dist++;
 		vector<NNode> newFroms;
 		Node* found = nullptr;
 		NNode* foundNnode = nullptr;
-		
-		for(int i = 0; i < froms.size(); ++i)
+
+		cerr << ">> GetPathNearstBfsRecurse" << (find == nullptr ? "Goal" : "Find") << " dist:" << dist << endl;
+
+		for (int i = 0; i < froms.size(); ++i)
 		{
 			NNode* nnode = &froms[i];
 			for (int j = 0; j < nnode->_node->_adjs.size(); ++j)
 			{
 				Node* node = GetNode(nnode->_node->_adjs[j]);
 				if (node->_isActive == false) continue;
-				if (node->_isGoal == true)
+				if ((find == nullptr && node->_isGoal == true) || (find != nullptr && node == find))
 				{
+					cerr << ">>> GetPathNearstBfsRecurse _isGoal :" << node->_idx << "/dist:" << dist << endl;
 					found = node; foundNnode = nnode;
 					break;
 				}
@@ -258,15 +261,16 @@ public:
 		{
 			path_out.insert(path_out.begin(), found->_idx);
 			NNode* iter = foundNnode;
-			while(true)
+			while (true)
 			{
 				path_out.insert(path_out.begin(), iter->_node->_idx);
 				if (iter->_isRoot) break;
 				iter = iter->_parent;
 			}
+			return;
 		}
 
-		GetPathNearstBfsRecurse(newFroms, dist, path_out, dist_out);
+		GetPathNearstBfsRecurse(newFroms, dist, find, path_out, dist_out);
 	}
 
 	static void GetAgentToGoal(int nodeAgent, vector<int>& wayToGoal_out)
@@ -277,10 +281,10 @@ public:
 		//GetPathNearstRecurse(agent, dist, path, dist_out, pathToGoal);
 
 		vector<int> pathToGoal;
-		int dist = 0,dist_out = 9999999;
+		int dist = 0, dist_out = 9999999;
 		Node* agent = GetNode(nodeAgent);
 		vector<NNode> froms{ NNode(agent, true) };
-		GetPathNearstBfsRecurse(froms, dist, pathToGoal, dist_out);
+		GetPathNearstBfsRecurse(froms, dist, nullptr, pathToGoal, dist_out);
 
 		cerr << ">> pathToGoal" << pathToGoal.size() << " NodeAdjMultiGoals" << NodeAdjMultiGoals.size() << endl;
 
@@ -323,16 +327,17 @@ public:
 
 	static int GetDistAgent(Node* agent, Node* to, int& cntAdjGoal_out)
 	{
-		int dist = 0, distReturn = NULL_NODE;
-		vector<Node*> pathResult, path;
-		GetDistAgentRecurse(agent, to, dist, path, distReturn, pathResult);
+		int dist = 0, distResult = NULL_NODE;
+		vector<int> pathResult, path;
+		vector<NNode> froms{ NNode(agent, true) };
+		GetPathNearstBfsRecurse(froms, dist, to, pathResult, distResult);
 
 		int cntAdjGoal = 0;
 		if (pathResult.size() >= 1)
 		{
 			for (int i = 0; i < pathResult.size(); ++i)
 			{
-				Node* iter = pathResult[i];
+				Node* iter = GetNode(pathResult[i]);
 				if (iter->IsAdjsGoalAny() == true) { cntAdjGoal++; }
 			}
 
@@ -340,32 +345,6 @@ public:
 		}
 
 		return pathResult.size();
-	}
-
-	static void GetDistAgentRecurse(Node* from, Node* find, int dist, vector<Node*> path, int& dist_out, vector<Node*>& path_out)
-	{
-		dist++;
-
-		vector<Node*> pathUse = path;
-		pathUse.push_back(from);
-
-		for (int i = 0; i < from->_adjs.size(); ++i)
-		{
-			Node* iter = GetNode(from->_adjs[i]);
-			if (iter->_isActive == false || true == Contains(pathUse, iter) || true == iter->_isGoal)
-				continue;
-
-			if (iter == find && (dist_out == NULL_NODE || (dist_out != NULL_NODE && dist_out > dist)))
-			{
-				dist_out = dist;
-				pathUse.push_back(iter);
-				path_out = pathUse;
-				//cerr << ">> found : " << find->_idx << "/dist_out:" << dist << "/count:" << pathUse.size() << endl;
-				return;
-			}
-
-			GetDistAgentRecurse(iter, find, dist, pathUse, dist_out, path_out);
-		}
 	}
 
 public:
