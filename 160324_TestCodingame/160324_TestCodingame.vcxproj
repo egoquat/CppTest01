@@ -82,6 +82,7 @@
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BruceLee.h" />
     <ClInclude Include="ChuckNorris.h" />
     <ClInclude Include="HeatDetector.h" />
     <ClInclude Include="LinkedList.h" />

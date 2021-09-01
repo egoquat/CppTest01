@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.329
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31613.86
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "130327_Try_CharIncoder_Test", "130327_Try_incoder\130327_Try_incoder.vcxproj", "{7C61B927-A157-42D2-9ECC-9C0A6488CF23}"
 EndProject
@@ -41,8 +41,6 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "160214_TestCodility_03", "160214_TestCodility_03\160214_TestCodility_03.vcxproj", "{2FD744F5-0DC8-40CD-A0D0-7ACEECB7E8B8}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "160324_TestCodingame", "160324_TestCodingame\160324_TestCodingame.vcxproj", "{A37DE385-F2C7-438D-9551-3D16897D7371}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "200316_TestProgrammers", "200316_TestProgrammers\200316_TestProgrammers.vcxproj", "{AEDBA2D5-057A-4336-969A-80244A7DD55A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -296,20 +294,6 @@ Global
 		{A37DE385-F2C7-438D-9551-3D16897D7371}.Release|Win32.ActiveCfg = Release|Win32
 		{A37DE385-F2C7-438D-9551-3D16897D7371}.Release|Win32.Build.0 = Release|Win32
 		{A37DE385-F2C7-438D-9551-3D16897D7371}.Release|x64.ActiveCfg = Release|Win32
-		{AEDBA2D5-057A-4336-969A-80244A7DD55A}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{AEDBA2D5-057A-4336-969A-80244A7DD55A}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{AEDBA2D5-057A-4336-969A-80244A7DD55A}.Debug|Mixed Platforms.Build.0 = Debug|Win32
-		{AEDBA2D5-057A-4336-969A-80244A7DD55A}.Debug|Win32.ActiveCfg = Debug|Win32
-		{AEDBA2D5-057A-4336-969A-80244A7DD55A}.Debug|Win32.Build.0 = Debug|Win32
-		{AEDBA2D5-057A-4336-969A-80244A7DD55A}.Debug|x64.ActiveCfg = Debug|x64
-		{AEDBA2D5-057A-4336-969A-80244A7DD55A}.Debug|x64.Build.0 = Debug|x64
-		{AEDBA2D5-057A-4336-969A-80244A7DD55A}.Release|Any CPU.ActiveCfg = Release|Win32
-		{AEDBA2D5-057A-4336-969A-80244A7DD55A}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{AEDBA2D5-057A-4336-969A-80244A7DD55A}.Release|Mixed Platforms.Build.0 = Release|Win32
-		{AEDBA2D5-057A-4336-969A-80244A7DD55A}.Release|Win32.ActiveCfg = Release|Win32
-		{AEDBA2D5-057A-4336-969A-80244A7DD55A}.Release|Win32.Build.0 = Release|Win32
-		{AEDBA2D5-057A-4336-969A-80244A7DD55A}.Release|x64.ActiveCfg = Release|x64
-		{AEDBA2D5-057A-4336-969A-80244A7DD55A}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

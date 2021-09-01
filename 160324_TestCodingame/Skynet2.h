@@ -58,7 +58,6 @@ private:
 	static vector<int> NodeAdjMultiGoals;
 	static vector<Node*> Nodes;
 	static int CntNode;
-	static int CntTest;
 
 public:
 	vector<int> _adjs;
@@ -79,7 +78,6 @@ public:
 	static void Init(const int N)
 	{
 		Nodes.reserve(N);
-
 		for (int i = 0; i < N; ++i)
 		{
 			Nodes.push_back(new Node(i));
@@ -358,7 +356,6 @@ vector<Node*> Node::Nodes;
 vector<int> Node::Goals;
 vector<int> Node::NodeAdjMultiGoals;
 int Node::CntNode = 0;
-int Node::CntTest = 0;
 
 int main()
 {
