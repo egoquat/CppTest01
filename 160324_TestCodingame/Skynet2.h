@@ -14,19 +14,15 @@ using namespace std;
 class Node
 {
 private:
-	template<typename T>
-	static bool Remove(vector<T>& v, const T r)
+	template<typename T> static bool Remove(vector<T>& v, const T r)
 	{
-		if (v.size() <= 0) return false;
-		bool isFound = false;
-		typedef typename vector<T>::iterator iter_v;
-		iter_v iter = v.begin();
-		for (; iter != v.end(); ++iter)
-		{
-			if (r == *iter) { isFound = true; break; }
+		auto it = std::find(v.begin(), v.end(), r);
+		if (it != v.end()) {
+			std::swap(*it, v.back());
+			v.pop_back();
+			return true;
 		}
-		if (true == isFound) { v.erase(iter); }
-		return isFound;
+		return false;
 	}
 
 	template<typename T>

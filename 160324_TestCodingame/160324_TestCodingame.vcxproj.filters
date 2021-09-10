@@ -47,5 +47,20 @@
     <ClInclude Include="BruceLee.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="StallTilt.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SudokuValidator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowOfTheKnight1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ThereIsNoSpoon1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MagicCountOfNumbers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
