@@ -17,6 +17,7 @@
 
 #include "windows.h"
 #include <iostream>
+#include <string.h>
 
 using namespace std;
 
@@ -25,9 +26,10 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-//#ifdef CHECK_MEMORYLEAK
-//	_CrtSetBreakAlloc(147);
-//#endif // CHECK_MEMORYLEAK
+#ifdef CHECK_MEMORYLEAK
+ 	   _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+//	_CrtSetBreakAlloc(151);
+#endif // CHECK_MEMORYLEAK
 
 	int				baseNumber = 0;
 	int				operatorType = 0;
@@ -36,50 +38,46 @@ int main(int argc, char *argv[])
 
 	char*			szTempBuffer = new char[MAX_PATH];
 
-	while (true)
-	{
-		printf("\nWrite Any Number:");
-		scanf("%d", &baseNumber);
+	//while (true)
+	//{
+	//	printf("\nWrite Any Number:");
+	//	scanf("%d", &baseNumber);
 
-		printf("\n 1.<<  2.>>");
-		printf("\n Select Operator:");
-		scanf("%d", &operatorType);
+	//	printf("\n 1.<<  2.>>");
+	//	printf("\n Select Operator:");
+	//	scanf("%d", &operatorType);
 
-		printf("\n Write Shift Number :", shiftNumber);
-		scanf("%d", &shiftNumber);
+	//	printf("\n Write Shift Number :", shiftNumber);
+	//	scanf("%d", &shiftNumber);
 
-		if (operatorType == 1)
-		{
-			resultNumber = baseNumber LEFT shiftNumber;// - baseNumber;
+	//	if (operatorType == 1)
+	//	{
+	//		resultNumber = baseNumber LEFT shiftNumber;// - baseNumber;
 
-		}
-		else
-		{
-			resultNumber = baseNumber RIGHT shiftNumber;// + baseNumber;
-		}
+	//	}
+	//	else
+	//	{
+	//		resultNumber = baseNumber RIGHT shiftNumber;// + baseNumber;
+	//	}
 
-		sprintf(szTempBuffer, "\nResult Number:%d\n", resultNumber);
+	//	sprintf(szTempBuffer, "\nResult Number:%d\n", resultNumber);
 
-		printf(szTempBuffer);
+	//	printf(szTempBuffer);
 
-		memset(szTempBuffer, 0, sizeof(char) * MAX_PATH);
+	//	memset(szTempBuffer, 0, sizeof(char) * MAX_PATH);
 
-		printf("Again?(1:Yes/2:No):");
+	//	printf("Again?(1:Yes/2:No):");
 
-		int inputNumber = 1;
-		scanf("%d", &inputNumber);
+	//	int inputNumber = 1;
+	//	scanf("%d", &inputNumber);
 
-		if (1 != inputNumber)
-		{
-			break;
-		}
-	}
+	//	if (1 != inputNumber)
+	//	{
+	//		break;
+	//	}
+	//}
 
 	delete[] szTempBuffer; 
-
-#ifdef CHECK_MEMORYLEAK
-	int numberLeaks = _CrtDumpMemoryLeaks();
-#endif // CHECK_MEMORYLEAK
 
 	return EXIT_SUCCESS;
 }
