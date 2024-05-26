@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{c1323867-d1cd-478e-9158-8884c720f136}</ProjectGuid>
-    <RootNamespace>My240103CodingTest</RootNamespace>
+    <ProjectGuid>{38473a0b-0345-4069-ba34-611119046e3f}</ProjectGuid>
+    <RootNamespace>My240526AllSortTest</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -127,11 +127,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CodingTest.cpp" />
+    <ClInclude Include="Source\AllSort.h" />
+    <ClInclude Include="Source\Profiler.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CodingTestBFS01.h" />
-    <ClInclude Include="CodingTestParkWork.h" />
+    <ClCompile Include="Source\maincpp.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
