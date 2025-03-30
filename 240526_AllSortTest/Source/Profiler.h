@@ -11,8 +11,6 @@ class Profiler {
 public: 
     Profiler();
     void start();
-    void toc();
-    void toc(std::string s);
     double stop();
     double stop(std::string s);
     void dump();
@@ -36,15 +34,6 @@ double Profiler::stop(std::string s) {
 
 double Profiler::stop() {
     return this->stop("");
-}
-
-void Profiler::toc() {
-    this->toc("");
-}
-
-void Profiler::toc(std::string s) {
-    this->stop(s);
-    this->start();
 }
 
 void Profiler::dump() {
