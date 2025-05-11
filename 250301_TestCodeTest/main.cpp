@@ -110,5 +110,5 @@ int main()
         cout << maps[i] << endl;
     }
 
-    delete maps;
+    delete[] maps;
 }
