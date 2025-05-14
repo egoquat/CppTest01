@@ -2,6 +2,7 @@
 #include <vector>
 #include <unordered_map>
 #include <list>
+#include <queue>
 
 using namespace std;
 
@@ -10,36 +11,42 @@ using namespace std;
 int w = 0, h = 0;
 
 void UpdateSideDfs(vector<string>& stgs, int x, int y) {
-    int ix = 0, iy = 0; 
-    ix = x - 1; iy = y;
-    if (ix >= 0 && ix < w && iy >= 0 && iy < h) {
-        if (stgs[iy][ix] == '$') {
-            stgs[iy][ix] = '#';
-            UpdateSideDfs(stgs, ix, iy);
-        }
-    }
-    ix = x + 1; iy = y;
-    if (ix >= 0 && ix < w && iy >= 0 && iy < h) {
-        if (stgs[iy][ix] == '$') {
-            stgs[iy][ix] = '#';
-            UpdateSideDfs(stgs, ix, iy);
-        }
-    }
-    ix = x; iy = y - 1;
-    if (ix >= 0 && ix < w && iy >= 0 && iy < h) {
-        if (stgs[iy][ix] == '$') {
-            stgs[iy][ix] = '#';
-            UpdateSideDfs(stgs, ix, iy);
-        }
-    }
-    ix = x; iy = y + 1;
-    if (ix >= 0 && ix < w && iy >= 0 && iy < h) {
-        if (stgs[iy][ix] == '$') {
-            stgs[iy][ix] = '#';
-            UpdateSideDfs(stgs, ix, iy);
+    stgs[y][x] = '#';
+    const int dx[] = { -1, 1, 0, 0 };
+    const int dy[] = { 0, 0, -1, 1 };
+    for (int i = 0; i < 4; ++i) {
+        int ix = x + dx[i], iy = y + dy[i];
+        if (ix >= 0 && ix < w && iy >= 0 && iy < h) {
+            if (stgs[iy][ix] == '$') {
+                UpdateSideDfs(stgs, ix, iy);
+            }
         }
     }
 }
+
+void UpdateSideBfs(vector<string>& stgs, int x, int y) {
+    queue<pair<int, int>> q;
+    q.push({x, y});
+    while(q.empty() == false) {
+        pair<int, int> cu = q.front();
+        q.pop();
+        int cx = cu.first, cy = cu.second;
+        stgs[cy][cx] = '#';
+
+        const int dx[] = { -1, 1, 0, 0 };
+        const int dy[] = { 0, 0, -1, 1 };
+        for (int i = 0; i < 4; ++i) {
+            int ix = cx + dx[i], iy = cy + dy[i];
+            if (ix >= 0 && ix < w && iy >= 0 && iy < h) {
+                if (stgs[iy][ix] == '$') {
+                    stgs[iy][ix] = '#';
+                    q.push({ix, iy});
+                }
+            }
+        }
+    }
+}
+
 bool IsSide(const vector<string>& stgs, int x, int y) {
     bool bSide = (x == 0 || x >= (w - 1)) || (y == 0 || y >= (h - 1));
     if (bSide == true) return true;
@@ -94,8 +101,7 @@ int solution(vector<string> stgs, vector<string> reqs) {
                 int y = idx / w;
                 bool bRem = IsSide(stgs, x, y);
                 if (bRem == true) {
-                    stgs[y][x] = '#';
-                    UpdateSideDfs(stgs, x, y);
+                    UpdateSideBfs(stgs, x, y);
                 } else {
                     stgs[y][x] = '$';
                 }
@@ -127,8 +133,7 @@ int solution(vector<string> stgs, vector<string> reqs) {
         for (int idx : emps) {
             int x = idx % w;
             int y = idx / w;
-            stgs[y][x] = '#';
-            UpdateSideDfs(stgs, x, y);
+            UpdateSideBfs(stgs, x, y);
         }
     }
     
@@ -138,25 +143,28 @@ int solution(vector<string> stgs, vector<string> reqs) {
 
 int main()
 {
-    vector<string> stgs
-    = { "BBACC","BBACC","BAAAC","BBAAC","BBACC","BBBCC" };
-    //= { "BBBB","AAAB","BBBB" };
-    //= { "AAAA", "ABAA", "ABAA", "ACAA", "AAAA" };
-    //= { "AAA","BAB","AAA" };
-    //= { "AAAA", "ABAA", "ABAA", "ACAA", "AAAA" };
-    //= {"AAAAA", "ABCDA", "AGAEA", "AZAFA", "ZYAAA" };
-    //= { "CCCCC", "CABAC", "CABAC", "CCABC" };
-    //= { "HAH", "HBH", "HHH", "HAH", "HBH" };
-    //= {"AZWQY", "CAABX", "BBDDA", "ACACA"};
-    vector<string> reqs
-    = { "A","A","A","A","A" };
-    //= { "BB","C" };
-    //= { "A" };
-    //= { "BB","C" };
-    //= { "BB", "DD", "Z", "Y", "Z", "G", "C", "E", "F" };
-    //= { "BB", "A" };
-    //= { "C", "B", "B", "B", "B", "H" };
-    //= {"A", "BB", "A"};
+    vector<vector<string>> stgs {
+    { "BBACC","BBACC","BAAAC","BBAAC","BBACC","BBBCC" }, 
+    { "BBBB","AAAB","BBBB" }, 
+    { "AAAA", "ABAA", "ABAA", "ACAA", "AAAA" }, 
+    { "AAA","BAB","AAA" }, 
+    { "AAAA", "ABAA", "ABAA", "ACAA", "AAAA" }, 
+    {"AAAAA", "ABCDA", "AGAEA", "AZAFA", "ZYAAA" }, 
+    { "CCCCC", "CABAC", "CABAC", "CCABC" }, 
+    { "HAH", "HBH", "HHH", "HAH", "HBH" }, 
+    {"AZWQY", "CAABX", "BBDDA", "ACACA"} };
+    vector<vector<string>> reqs {
+    { "A","A","A","A","A" }, 
+    { "BB","C" }, 
+    { "A" }, 
+    { "BB","C" }, 
+    { "BB", "DD", "Z", "Y", "Z", "G", "C", "E", "F" }, 
+    { "BB", "A" },
+    { "C", "BB", "A" }, 
+    { "C", "B", "B", "B", "B", "H" }, 
+    {"A", "BB", "A"},  };
 
-    solution(stgs, reqs);
+    for (int i = 0; i < stgs.size(); ++i) {
+        solution(stgs[i], reqs[i]);   
+    }
 }
