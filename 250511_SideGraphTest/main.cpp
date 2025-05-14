@@ -9,23 +9,35 @@ using namespace std;
 
 int w = 0, h = 0;
 
-void UpdateSide(vector<string>& stgs, int x, int y) {
+void UpdateSideDfs(vector<string>& stgs, int x, int y) {
     int ix = 0, iy = 0; 
     ix = x - 1; iy = y;
     if (ix >= 0 && ix < w && iy >= 0 && iy < h) {
-        if (stgs[iy][ix] == '$') stgs[iy][ix] = '#';
+        if (stgs[iy][ix] == '$') {
+            stgs[iy][ix] = '#';
+            UpdateSideDfs(stgs, ix, iy);
+        }
     }
     ix = x + 1; iy = y;
     if (ix >= 0 && ix < w && iy >= 0 && iy < h) {
-        if (stgs[iy][ix] == '$') stgs[iy][ix] = '#';
+        if (stgs[iy][ix] == '$') {
+            stgs[iy][ix] = '#';
+            UpdateSideDfs(stgs, ix, iy);
+        }
     }
     ix = x; iy = y - 1;
     if (ix >= 0 && ix < w && iy >= 0 && iy < h) {
-        if (stgs[iy][ix] == '$') stgs[iy][ix] = '#';
+        if (stgs[iy][ix] == '$') {
+            stgs[iy][ix] = '#';
+            UpdateSideDfs(stgs, ix, iy);
+        }
     }
     ix = x; iy = y + 1;
     if (ix >= 0 && ix < w && iy >= 0 && iy < h) {
-        if (stgs[iy][ix] == '$') stgs[iy][ix] = '#';
+        if (stgs[iy][ix] == '$') {
+            stgs[iy][ix] = '#';
+            UpdateSideDfs(stgs, ix, iy);
+        }
     }
 }
 bool IsSide(const vector<string>& stgs, int x, int y) {
@@ -83,7 +95,7 @@ int solution(vector<string> stgs, vector<string> reqs) {
                 bool bRem = IsSide(stgs, x, y);
                 if (bRem == true) {
                     stgs[y][x] = '#';
-                    UpdateSide(stgs, x, y);
+                    UpdateSideDfs(stgs, x, y);
                 } else {
                     stgs[y][x] = '$';
                 }
@@ -94,7 +106,7 @@ int solution(vector<string> stgs, vector<string> reqs) {
         if (sts.size() <= 0)
             continue;
 
-        list<int> adds;
+        list<int> emps;
         for (list<int>::iterator it = sts.begin(); it != sts.end();) {
             int idx = *it;
             int x = idx % w;
@@ -104,7 +116,7 @@ int solution(vector<string> stgs, vector<string> reqs) {
             if (bRem == true) {
                 num++;
                 stns[c]--;
-                adds.push_back(idx);
+                emps.push_back(idx);
                 it = sts.erase(it);
             }
             else {
@@ -112,11 +124,11 @@ int solution(vector<string> stgs, vector<string> reqs) {
             }
         }
 
-        for (int idx : adds) {
+        for (int idx : emps) {
             int x = idx % w;
             int y = idx / w;
             stgs[y][x] = '#';
-            UpdateSide(stgs, x, y);
+            UpdateSideDfs(stgs, x, y);
         }
     }
     
@@ -127,7 +139,8 @@ int solution(vector<string> stgs, vector<string> reqs) {
 int main()
 {
     vector<string> stgs
-    = { "BBBB","AAAB","BBBB" };
+    = { "BBACC","BBACC","BAAAC","BBAAC","BBACC","BBBCC" };
+    //= { "BBBB","AAAB","BBBB" };
     //= { "AAAA", "ABAA", "ABAA", "ACAA", "AAAA" };
     //= { "AAA","BAB","AAA" };
     //= { "AAAA", "ABAA", "ABAA", "ACAA", "AAAA" };
@@ -136,7 +149,7 @@ int main()
     //= { "HAH", "HBH", "HHH", "HAH", "HBH" };
     //= {"AZWQY", "CAABX", "BBDDA", "ACACA"};
     vector<string> reqs
-    = { "B","A" };
+    = { "A","A","A","A","A" };
     //= { "BB","C" };
     //= { "A" };
     //= { "BB","C" };
