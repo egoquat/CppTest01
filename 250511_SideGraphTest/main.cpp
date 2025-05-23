@@ -1,3 +1,4 @@
+/*
 #include <string>
 #include <vector>
 #include <unordered_map>
@@ -139,7 +140,7 @@ int solution(vector<string> stgs, vector<string> reqs) {
     
     int ans = ntotal - num;
     return ans;
-}
+} 
 
 int main()
 {
@@ -167,4 +168,75 @@ int main()
     for (int i = 0; i < stgs.size(); ++i) {
         solution(stgs[i], reqs[i]);   
     }
+}
+*/
+
+#include <string>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+static const int ndigit = 'z' - 'a' + 1;
+long long getnb(const string& ban) {
+    
+    long long nban = 0;
+    for (int i = 0; i < ban.size(); ++i) {
+        char c = ban[i];
+        int nc = c - 'a' + 1;
+        int digit = ban.size() - i - 1;
+        nban = nban + (pow(ndigit, digit) * nc);
+        //cerr << ban << " : " << nc << ", " << digit << ", " << nban << endl;
+    }
+    return nban;
+}
+
+string getsb(long long nb) {
+    long long inb = nb;
+    string sb;
+    int digit = 0;
+    while(inb != 0){
+        int n = inb % ndigit;
+        sb = (char)('a' + n - 1) + sb;
+        inb = inb / ndigit;
+    }
+    return sb;
+}
+
+string solution(long long n, vector<string> bans) {
+    vector<long long> nbans;
+    long long nban = n;
+    string sb = getsb(nban); 
+    cerr << " n : " << n << " : " <<  sb << endl;
+    int cntb = 0;
+    for (int i = 0; i < bans.size(); ++i) {
+        const string& ban = bans[i];
+        long long nb = getnb(ban);
+        if ((nban + cntb) > nb) {
+            cntb++;
+            string sbtest = getsb(nb);
+            cerr << ban << " : " << nb << ", " << sbtest << endl;
+        }
+    }
+    
+    nban = nban + cntb;
+    
+    string ans = getsb(nban);
+    cerr << " > " << ans << endl;
+    return ans;
+}
+
+int main()
+{
+    long long n;
+    vector<string> bans;
+
+    n = 30;
+    bans = { "d", "e", "bb", "aa", "ae" };
+    solution(n, bans);
+
+    n = 7388;
+    bans = { "gqk", "kdn", "jxj", "jxi", "fug", "jxg", "ewq", "len", "bhc" };
+    solution(n, bans);
+    return 0;
 }
