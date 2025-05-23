@@ -174,6 +174,7 @@ int main()
 #include <string>
 #include <vector>
 #include <iostream>
+#include <math.h>
 
 using namespace std;
 
@@ -196,9 +197,9 @@ string getsb(long long nb) {
     string sb;
     int digit = 0;
     while(inb != 0){
-        int n = inb % ndigit;
-        sb = (char)('a' + n - 1) + sb;
-        inb = inb / ndigit;
+        int n = (inb - 1) % ndigit;
+        sb = (char)('a' + n) + sb;
+        inb = (inb - 1) / ndigit;
     }
     return sb;
 }
@@ -232,11 +233,16 @@ int main()
     vector<string> bans;
 
     n = 30;
+    //n = 52;
     bans = { "d", "e", "bb", "aa", "ae" };
     solution(n, bans);
 
     n = 7388;
     bans = { "gqk", "kdn", "jxj", "jxi", "fug", "jxg", "ewq", "len", "bhc" };
+    solution(n, bans);
+
+    n = 217180147157;
+    bans = { "abcd", "zefdgd" };
     solution(n, bans);
     return 0;
 }
