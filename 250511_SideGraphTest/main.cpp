@@ -213,6 +213,11 @@ string solution(long long n, vector<string> bans) {
     for (int i = 0; i < bans.size(); ++i) {
         const string& ban = bans[i];
         long long nb = getnb(ban);
+        nbans.push_back(nb);
+    }
+
+    for (int i = 0; i < nbans.size(); ++i) {
+        long long nb = nbans[i];
         if ((nban + cntb) > nb) {
             cntb++;
             string sbtest = getsb(nb);
